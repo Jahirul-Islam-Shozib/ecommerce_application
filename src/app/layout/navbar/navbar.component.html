@@ -1,0 +1,40 @@
+<!-- navbar.component.html -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="container">
+    <div class="flex justify-between items-center h-16">
+
+      <div class="flex items-center">
+        <img src="assets/images/ecom_logo.png" class="website_logo">
+      </div>
+
+      <div>
+        <p-select
+          [options]="searchOptions"
+          [(ngModel)]="selectedSearch"
+          optionLabel="label"
+          placeholder="Find your product"
+          class="w-80 text-sm"
+          inputStyleClass="py-2 px-3"
+        ></p-select>
+      </div>
+
+      <div class="flex space-x-10">
+        <div class="hidden md:flex space-x-6 items-center">
+          <a routerLink="/about">About Us</a>
+          <a routerLink="/contact" >Contact</a>
+        </div>
+
+        <div class="flex gap-4 items-center">
+          <div>
+            <i class="pi pi-shopping-cart me-2" style="font-size: 1rem"></i><span>Cart</span>
+          </div>
+          <div>
+            <i class="pi pi-user me-2" style="font-size: 1rem"></i><span>Account</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
