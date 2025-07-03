@@ -1,0 +1,72 @@
+<!--<div class="product-container container mt-20">-->
+<!--  <h1 class="text-3xl mb-8">All Products</h1>-->
+
+<!--  @for (product of products; track product.productName) {-->
+<!--    <div class="p-4 bg-white w-80 h-auto rounded-lg" style="border: 2px solid #2F5249;">-->
+<!--      <img src="assets/images/radhuni/basic-spices/300tn_thumb_turmeric(1).png">-->
+<!--      <div class="flex flex-col items-center">-->
+<!--        <span class="mb-4">{{product.productName}}</span>-->
+<!--        <span class="mb-3 text-sm">{{product.productQuantity}}</span>-->
+<!--        <span class="text-2xl">৳{{product.productPrice}}</span>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  }-->
+<!--</div>-->
+
+
+<div class="product-container container mt-20">
+  <h1 class="text-2xl mb-8 font-bold">All Products</h1>
+
+<!--  <div class="flex flex-wrap justify-center gap-6">-->
+<!--    @for (product of products; track product.productName) {-->
+<!--      <div class="p-4 bg-white w-80 rounded-lg cursor-pointer" style="border: 2px solid #2F5249;">-->
+<!--        <img src="assets/images/radhuni/basic-spices/300tn_thumb_turmeric(1).png" alt="{{product.productName}}" class="w-full h-48 object-contain mb-4">-->
+<!--        <div class="flex flex-col items-center">-->
+<!--          <span class="mb-4 font-semibold text-lg">{{product.productName}}</span>-->
+<!--          <span class="mb-3 text-sm text-gray-600">{{product.productWeight}}</span>-->
+<!--          <span class="text-2xl font-bold text-green-800">৳{{product.productPrice}}</span>-->
+<!--        </div>-->
+<!--      </div>-->
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          *ngFor="let product of productService.getPopularProducts()"
+          class="bg-white border border-[#D7EBEB] rounded-lg p-4 relative">
+
+          <div>
+            <div class="bg-[#DFEEEE] rounded-lg overflow-hidden p-4 h-[150px] flex items-center justify-center">
+              <img [src]="product.imageUrl" alt="{{product.name}}" class="h-full object-contain" />
+            </div>
+            <div class="flex justify-between text-xs text-gray-400 mt-2 mb-1">
+              <span>{{ product.brand }}</span>
+              <span>{{ product.weight }}</span>
+            </div>
+          </div>
+
+          <div class="mt-2">
+            <p class="text-sm text-[#1b3b2f] font-medium leading-tight">
+              {{ product.name }}
+            </p>
+          </div>
+
+          <div class="mt-4 flex items-end justify-between">
+            <div>
+              <p class="text-sm text-gray-400 line-through" *ngIf="product.originalPrice !== product.discountedPrice">
+                {{ product.originalPrice }}৳
+              </p>
+              <p class="text-xl font-bold text-[#1b3b2f] -mt-1">{{ product.discountedPrice }}৳</p>
+            </div>
+
+            <button class="flex items-center gap-2 text-sm bg-[#e6fbfb] hover:bg-[#d1f7f7]
+        text-[#2F5249] font-medium py-1 px-3 rounded border border-[#bde5e5]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2 4m2-4l1.5 4M17 13l1.5 4m-1.5-4l2-4M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
+              </svg>
+              Add
+            </button>
+          </div>
+        </div>
+<!--      </div>-->
+<!--    }-->
+  </div>
+</div>

@@ -1,0 +1,182 @@
+[
+  {
+    "productName": "Organic Turmeric Powder",
+    "productImage": "https://example.com/images/turmeric.jpg",
+    "productWeight": "100gm",
+    "productPrice": 80
+  },
+  {
+    "productName": "Basmati Rice",
+    "productImage": "https://example.com/images/rice.jpg",
+    "productWeight": "1kg",
+    "productPrice": 150
+  },
+  {
+    "productName": "Mustard Oil",
+    "productImage": "https://example.com/images/mustard-oil.jpg",
+    "productWeight": "500ml",
+    "productPrice": 120
+  },
+  {
+    "productName": "Wheat Flour",
+    "productImage": "https://example.com/images/flour.jpg",
+    "productWeight": "2kg",
+    "productPrice": 90
+  },
+  {
+    "productName": "Green Tea",
+    "productImage": "https://example.com/images/green-tea.jpg",
+    "productWeight": "250gm",
+    "productPrice": 160
+  },
+  {
+    "productName": "Black Pepper",
+    "productImage": "https://example.com/images/black-pepper.jpg",
+    "productWeight": "100gm",
+    "productPrice": 200
+  },
+  {
+    "productName": "Honey",
+    "productImage": "https://example.com/images/honey.jpg",
+    "productWeight": "250gm",
+    "productPrice": 180
+  },
+  {
+    "productName": "Chili Powder",
+    "productImage": "https://example.com/images/chili-powder.jpg",
+    "productWeight": "100gm",
+    "productPrice": 60
+  },
+  {
+    "productName": "Coriander Powder",
+    "productImage": "https://example.com/images/coriander.jpg",
+    "productWeight": "100gm",
+    "productPrice": 50
+  },
+  {
+    "productName": "Coconut Oil",
+    "productImage": "https://example.com/images/coconut-oil.jpg",
+    "productWeight": "500ml",
+    "productPrice": 130
+  },
+  {
+    "productName": "Jaggery",
+    "productImage": "https://example.com/images/jaggery.jpg",
+    "productWeight": "500gm",
+    "productPrice": 70
+  },
+  {
+    "productName": "Green Moong Dal",
+    "productImage": "https://example.com/images/moong.jpg",
+    "productWeight": "1kg",
+    "productPrice": 110
+  },
+  {
+    "productName": "Red Lentils",
+    "productImage": "https://example.com/images/lentils.jpg",
+    "productWeight": "1kg",
+    "productPrice": 100
+  },
+  {
+    "productName": "Sunflower Oil",
+    "productImage": "https://example.com/images/sunflower-oil.jpg",
+    "productWeight": "1L",
+    "productPrice": 145
+  },
+  {
+    "productName": "Salt",
+    "productImage": "https://example.com/images/salt.jpg",
+    "productWeight": "1kg",
+    "productPrice": 20
+  },
+  {
+    "productName": "Sugar",
+    "productImage": "https://example.com/images/sugar.jpg",
+    "productWeight": "1kg",
+    "productPrice": 50
+  },
+  {
+    "productName": "Cumin Seeds",
+    "productImage": "https://example.com/images/cumin.jpg",
+    "productWeight": "100gm",
+    "productPrice": 90
+  },
+  {
+    "productName": "Cardamom",
+    "productImage": "https://example.com/images/cardamom.jpg",
+    "productWeight": "50gm",
+    "productPrice": 250
+  },
+  {
+    "productName": "Cloves",
+    "productImage": "https://example.com/images/cloves.jpg",
+    "productWeight": "50gm",
+    "productPrice": 180
+  },
+  {
+    "productName": "Bay Leaf",
+    "productImage": "https://example.com/images/bay-leaf.jpg",
+    "productWeight": "25gm",
+    "productPrice": 30
+  },
+  {
+    "productName": "Cinnamon",
+    "productImage": "https://example.com/images/cinnamon.jpg",
+    "productWeight": "50gm",
+    "productPrice": 70
+  },
+  {
+    "productName": "Brown Rice",
+    "productImage": "https://example.com/images/brown-rice.jpg",
+    "productWeight": "1kg",
+    "productPrice": 170
+  },
+  {
+    "productName": "Besan (Gram Flour)",
+    "productImage": "https://example.com/images/besan.jpg",
+    "productWeight": "1kg",
+    "productPrice": 90
+  },
+  {
+    "productName": "Ghee",
+    "productImage": "https://example.com/images/ghee.jpg",
+    "productWeight": "500ml",
+    "productPrice": 290
+  },
+  {
+    "productName": "Dry Ginger Powder",
+    "productImage": "https://example.com/images/ginger.jpg",
+    "productWeight": "100gm",
+    "productPrice": 75
+  },
+  {
+    "productName": "White Pepper",
+    "productImage": "https://example.com/images/white-pepper.jpg",
+    "productWeight": "100gm",
+    "productPrice": 210
+  },
+  {
+    "productName": "Tamarind",
+    "productImage": "https://example.com/images/tamarind.jpg",
+    "productWeight": "250gm",
+    "productPrice": 50
+  },
+  {
+    "productName": "Rock Salt",
+    "productImage": "https://example.com/images/rock-salt.jpg",
+    "productWeight": "1kg",
+    "productPrice": 60
+  },
+  {
+    "productName": "Ajwain",
+    "productImage": "https://example.com/images/ajwain.jpg",
+    "productWeight": "100gm",
+    "productPrice": 65
+  },
+  {
+    "productName": "Fenugreek Seeds",
+    "productImage": "https://example.com/images/fenugreek.jpg",
+    "productWeight": "100gm",
+    "productPrice": 40
+  }
+]
