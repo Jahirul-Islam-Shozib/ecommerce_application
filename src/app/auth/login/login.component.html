@@ -1,0 +1,52 @@
+<div class="login-container">
+  <div class="login-content">
+    <h1>Login</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <!-- Phone Number -->
+      <label for="phoneNumber">Enter Your Phone Number</label>
+      <div class="input-group">
+        <span class="prefix">+88</span>
+        <input
+          id="phoneNumber"
+          type="text"
+          formControlName="phoneNumber"
+          placeholder="01XXXXXXXXX"
+        />
+      </div>
+      <div class="error" *ngIf="loginForm.get('phoneNumber')?.touched && loginForm.get('phoneNumber')?.invalid">
+        Valid phone number is required
+      </div>
+
+      <!-- Password -->
+      <label for="password">Password</label>
+      <div class="input-group password-group">
+        <input
+          id="password"
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="password"
+          placeholder="Enter password"
+        />
+        <button type="button" class="eye-btn" (click)="togglePassword()">
+          <i [ngClass]="hidePassword ? 'pi pi-eye' : 'pi pi-eye-slash'"></i>
+        </button>
+      </div>
+      <div class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+        Password must be at least 6 characters
+      </div>
+
+      <!-- Forgot Password -->
+      <a class="forgot" routerLink="/auth/set-password">Forgot Password?</a>
+
+      <!-- Login Button -->
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+
+    <!-- SignUp -->
+    <p class="signup-text">
+      Don’t have an account?
+      <a routerLink="/auth/register">SignUp</a>
+    </p>
+  </div>
+</div>
