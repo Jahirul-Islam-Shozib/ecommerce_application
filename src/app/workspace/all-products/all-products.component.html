@@ -1,0 +1,32 @@
+<!--<div class="product-container container mt-20">-->
+<!--  <h1 class="text-3xl mb-8">All Products</h1>-->
+
+<!--  @for (product of products; track product.productName) {-->
+<!--    <div class="p-4 bg-white w-80 h-auto rounded-lg" style="border: 2px solid #2F5249;">-->
+<!--      <img src="assets/images/radhuni/basic-spices/300tn_thumb_turmeric(1).png">-->
+<!--      <div class="flex flex-col items-center">-->
+<!--        <span class="mb-4">{{product.productName}}</span>-->
+<!--        <span class="mb-3 text-sm">{{product.productQuantity}}</span>-->
+<!--        <span class="text-2xl">৳{{product.productPrice}}</span>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  }-->
+<!--</div>-->
+
+
+<div class="product-container container mt-20">
+  <h1 class="text-3xl mb-8 ml-2">All Products</h1>
+
+  <div class="flex flex-wrap justify-center gap-6">
+    @for (product of products; track product.productName) {
+      <div class="p-4 bg-white w-80 rounded-lg" style="border: 2px solid #2F5249;">
+        <img src="assets/images/radhuni/basic-spices/300tn_thumb_turmeric(1).png" alt="{{product.productName}}" class="w-full h-48 object-contain mb-4">
+        <div class="flex flex-col items-center">
+          <span class="mb-4 font-semibold text-lg">{{product.productName}}</span>
+          <span class="mb-3 text-sm text-gray-600">{{product.productWeight}}</span>
+          <span class="text-2xl font-bold text-green-800">৳{{product.productPrice}}</span>
+        </div>
+      </div>
+    }
+  </div>
+</div>

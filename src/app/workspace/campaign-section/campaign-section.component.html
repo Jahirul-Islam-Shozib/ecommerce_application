@@ -1,0 +1,10 @@
+<div class="container mt-4">
+  <div class="slider">
+    <img
+      *ngFor="let image of imageList; let i = index"
+      [src]="image.src"
+      [alt]="image.alt"
+      [class.active]="i === currentIndex"
+    />
+  </div>
+</div>

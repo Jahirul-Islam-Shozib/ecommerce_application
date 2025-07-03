@@ -1,0 +1,38 @@
+<!-- navbar.component.html -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="container">
+    <div class="flex justify-between items-center h-16">
+
+      <div class="flex items-center">
+        <span class="font-semibold">Foodies</span>
+      </div>
+
+      <div>
+        <p-select
+          [options]="searchOptions"
+          [(ngModel)]="selectedSearch"
+          optionLabel="label"
+          placeholder="Find your product"
+          class="w-80 text-sm"
+          inputStyleClass="py-2 px-3"
+        ></p-select>
+      </div>
+
+      <div class="flex space-x-10">
+        <div class="hidden md:flex space-x-6 items-center">
+          <a routerLink="/">Shop</a>
+          <a routerLink="/menu">Brand</a>
+          <a routerLink="/about">About Us</a>
+          <a routerLink="/contact" >Contact</a>
+        </div>
+
+        <div class="space-x-6">
+          <i class="pi pi-user" style="font-size: 1rem"></i>
+          <i class="pi pi-shopping-cart" style="font-size: 1rem"></i>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
