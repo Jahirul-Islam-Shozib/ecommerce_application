@@ -1,0 +1,11 @@
+<div class="bg-white rounded-md p-4 mb-4 all-brands-container">
+  <h2 class="text-xl font-bold mb-4 border-b pb-2">All Brands</h2>
+  <ul class="space-y-1">
+    <li
+      *ngFor="let brandName of brandNames"
+      class="flex items-center gap-4 p-2 w-100 cursor-pointer">
+      <p-checkbox [inputId]="brandName.key" name="group" [value]="brandName" [(ngModel)]="selectedBrandnames"/>
+      <span class="brand-name">{{ brandName.name }}</span>
+    </li>
+  </ul>
+</div>

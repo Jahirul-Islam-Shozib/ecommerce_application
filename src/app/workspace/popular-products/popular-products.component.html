@@ -1,0 +1,46 @@
+<section class="mb-4">
+  <div class="flex items-center justify-between mb-4 md:mb-6">
+    <h2 class="text-lg md:text-xl font-semibold text-[#1b3b2f]">Popular Products</h2>
+    <a class="text-sm text-sky-600 hover:underline" routerLink="/products">See all products</a>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+    <div
+      *ngFor="let product of productService.getPopularProducts()"
+      class="bg-white border border-[#D7EBEB] rounded-lg p-3 md:p-4 relative">
+
+      <div>
+        <div class="bg-[#DFEEEE] rounded-lg overflow-hidden p-4 h-[150px] flex items-center justify-center">
+          <img [src]="product.imageUrl" alt="Product" class="h-full object-contain" />
+        </div>
+        <div class="flex justify-between text-xs text-gray-400 mt-2 mb-1">
+          <span>{{ product.brand }}</span>
+          <span>{{ product.weight }}</span>
+        </div>
+      </div>
+
+      <div class="mt-2">
+        <p class="text-sm text-[#1b3b2f] font-medium leading-tight">
+          {{ product.name }}
+        </p>
+      </div>
+
+      <div class="mt-4 flex items-end justify-between">
+        <div>
+          <p class="text-sm text-gray-400 line-through" *ngIf="product.originalPrice !== product.discountedPrice">
+            {{ product.originalPrice }}৳
+          </p>
+          <p class="text-xl font-bold text-[#1b3b2f] -mt-1">{{ product.discountedPrice }}৳</p>
+        </div>
+
+        <button class="flex items-center gap-2 text-sm bg-[#e6fbfb] hover:bg-[#d1f7f7]
+        text-[#2F5249] font-medium py-1 px-2 rounded border border-[#bde5e5]" (click)="addToCart(product)">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2 4m2-4l1.5 4M17 13l1.5 4m-1.5-4l2-4M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
+          </svg>
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

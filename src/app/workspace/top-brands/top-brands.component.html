@@ -1,0 +1,46 @@
+<!--<div class="bg-white rounded-md p-4 mb-4 top-brands-container">-->
+<!--  <h2 class="text-xl font-bold mb-4 border-b pb-2">Top Brands</h2>-->
+<!--  <ul class="space-y-4">-->
+<!--    <li-->
+<!--      *ngFor="let brand of brands"-->
+<!--      class="flex items-center gap-4 p-2 w-100 h-14 rounded-md cursor-pointer brand-item"-->
+<!--    >-->
+<!--      <img [src]="brand.image" [alt]="brand.name" class="brand-img" />-->
+<!--      <span>{{ brand.name }}</span>-->
+<!--    </li>-->
+<!--  </ul>-->
+<!--</div>-->
+
+
+<!--<div class="bg-white rounded-md p-4 mb-4 top-brands-container">-->
+<!--  <h2 class="text-xl font-bold mb-4 border-b pb-2">Top Brands</h2>-->
+<!--  <ul-->
+<!--    class="space-y-4 md:space-y-4 flex md:flex-col overflow-x-auto md:overflow-x-visible gap-4 md:gap-0"-->
+<!--  >-->
+<!--    <li-->
+<!--      *ngFor="let brand of brands"-->
+<!--      class="flex items-center gap-4 p-2 w-100 h-14 rounded-md cursor-pointer brand-item"-->
+<!--    >-->
+<!--      <img [src]="brand.image" [alt]="brand.name" class="brand-img w-16 h-16 object-contain" />-->
+<!--      <span class="text-center md:text-left text-sm">{{ brand.name }}</span>-->
+<!--    </li>-->
+<!--  </ul>-->
+<!--</div>-->
+
+<div class="bg-white rounded-md md:p-4 mb-4 top-brands-container">
+  <h2 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 md:border-b pb-2">Top Brands</h2>
+  <ul
+    class="flex flex-row overflow-x-auto gap-4 md:flex-col md:overflow-x-visible md:gap-0 md:space-y-4"
+  >
+    <li
+      *ngFor="let brand of brands"
+      class="flex justify-center md:justify-start items-center gap-2 min-w-[120px] p-1 md:px-2 md:py-1  rounded-md cursor-pointer brand-item"
+    >
+      <img [src]="brand.image" [alt]="brand.name" class="w-8 h-8 md:w-12 md:h-12 object-contain" />
+      <span class="text-sm">{{ brand.name }}</span>
+    </li>
+  </ul>
+</div>
+
+
+

@@ -1,0 +1,90 @@
+<div class="signUp-container">
+  <div class="signUp-content">
+    <div class="header-group">
+      <h1>Create account</h1>
+      <p>Square Employee Registration Only</p>
+    </div>
+
+
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+
+      <!-- Name -->
+      <label>Your Name*</label>
+      <input
+        pInputText
+        type="text"
+        id="name"
+        placeholder="Enter your name"
+        formControlName="name"
+      />
+      <div class="error" *ngIf="signUpForm.get('name')?.touched && signUpForm.get('name')?.invalid">
+        Name is required
+      </div>
+
+      <!-- Company -->
+      <label>Company*</label>
+      <p-select
+        [options]="companies"
+        formControlName="company"
+        optionLabel="name"
+        placeholder="Select your company"
+        class="w-full"/>
+      <div class="error" *ngIf="signUpForm.get('company')?.touched && signUpForm.get('company')?.invalid">
+        Company is required
+      </div>
+
+      <!-- Employee ID -->
+      <label>Employee ID*</label>
+      <input
+        pInputText
+        type="text"
+        id="employeeId"
+        placeholder="Enter your company ID"
+        formControlName="employeeId"
+      />
+      <div class="error" *ngIf="signUpForm.get('employeeId')?.touched && signUpForm.get('employeeId')?.invalid">
+        Employee ID is required
+      </div>
+
+      <!-- Phone -->
+      <label>Enter Your Phone Number*</label>
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <span>+88</span>
+        </p-inputgroup-addon>
+        <input pInputText formControlName="phone" placeholder="01XXXXXXXXX" />
+      </p-inputgroup>
+      <div class="error" *ngIf="signUpForm.get('phone')?.touched && signUpForm.get('phone')?.invalid">
+        Enter a valid phone number
+      </div>
+
+      <!-- Email -->
+      <label>Mail Address*</label>
+      <input pInputText type="email" formControlName="email" placeholder="Enter your mail address"/>
+      <div class="error" *ngIf="signUpForm.get('email')?.touched && signUpForm.get('email')?.invalid">
+        Enter a valid email
+      </div>
+
+      <!-- Password -->
+      <label for="password">Password</label>
+      <p-password
+        formControlName="password"
+        placeholder="Enter password"
+        [feedback]="false"
+        [toggleMask]="true"
+        class="w-full"/>
+
+      <div class="error" *ngIf="signUpForm.get('password')?.touched && signUpForm.get('password')?.invalid">
+        Password must be at least 6 characters
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" [disabled]="signUpForm.invalid">Next</button>
+    </form>
+
+    <p class="login-link">
+      Already have an account? <a routerLink="/auth/login">Login</a>
+    </p>
+  </div>
+</div>
+

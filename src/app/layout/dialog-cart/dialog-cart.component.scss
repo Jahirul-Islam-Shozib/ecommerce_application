@@ -1,0 +1,16 @@
+.p-tab-active {
+  border-color: #0D9488 !important;
+  color: #0D9488;
+}
+
+::ng-deep {
+  .p-dialog-content {
+    padding: 0.5rem !important;
+  }
+}
+
+.confirmation-dialog {
+  ::ng-deep.p-dialog-header {
+    padding: 0.5rem !important;
+  }
+}
