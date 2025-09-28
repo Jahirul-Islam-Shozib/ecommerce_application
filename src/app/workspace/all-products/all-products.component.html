@@ -9,18 +9,23 @@
   <div class="col-span-12 md:col-span-9 flex flex-col gap-6">
     <h1 class="text-2xl font-bold">All Products</h1>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div *ngIf="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <p-skeleton *ngFor="let i of [1,2,3,4,5,6,7,8]" height="250px" borderRadius="12px"></p-skeleton>
+    </div>
+
+    <div *ngIf="!loading && products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <div
-        *ngFor="let product of productService.getPopularProducts()"
+        *ngFor="let product of products"
         class="bg-white border border-[#D7EBEB] rounded-lg p-4 relative">
 
         <div>
-          <div class="bg-[#DFEEEE] rounded-lg overflow-hidden p-4 h-[150px] flex items-center justify-center">
-            <img [src]="product.imageUrl" alt="{{product.name}}" class="h-full object-contain"/>
+          <div
+            class="bg-[#DFEEEE] rounded-lg overflow-hidden p-4 h-[150px] flex items-center justify-center bg-transparent">
+            <img [src]="'data:image/png;base64,' + product.image" alt="{{product.name}}" class="h-full object-contain"/>
           </div>
           <div class="flex justify-between text-xs text-gray-400 mt-2 mb-1">
             <span>{{ product.brand }}</span>
-            <span>{{ product.weight }}</span>
+            <span>{{ product.weightValue }} {{ product.weightUnit }}</span>
           </div>
         </div>
 
@@ -49,6 +54,17 @@
           </button>
         </div>
       </div>
+    </div>
+
+    <div
+      *ngIf="!loading"
+      class="pagination">
+      <p-paginator
+        [first]="first"
+        [rows]="pageSize"
+        [totalRecords]="totalRecords"
+        (onPageChange)="onPageChange($event)"
+      />
     </div>
 
     <div class="mt-20">

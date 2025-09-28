@@ -1,0 +1,26 @@
+<p-autoComplete
+  [(ngModel)]="selectedProduct"
+  [suggestions]="filteredProducts"
+  (completeMethod)="onFilterProduct($event)"
+  (onSelect)="onProductSelected($event)"
+  optionLabel="productName"
+  placeholder="Search products..."
+  class="custom-autocomplete"
+>
+  <!-- Item Template -->
+  <ng-template let-product pTemplate="item">
+    <div class="flex items-center gap-3 w-full hover:bg-gray-100 rounded transition">
+      <img
+        src="assets/images/aram-juce/300tn_thumb_aaram(2).png"
+        alt="{{ product.productName }}"
+        class="product-thumb"
+      />
+      <div class="text-gray-800 font-medium">{{ product.productName }}</div>
+    </div>
+  </ng-template>
+
+  <!-- Header Template -->
+  <ng-template pTemplate="header">
+    <div class="font-medium px-3 py-2">Available Products</div>
+  </ng-template>
+</p-autoComplete>

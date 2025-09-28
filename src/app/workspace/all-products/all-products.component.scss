@@ -1,3 +1,27 @@
 .product-container{
   height: 100%;
 }
+
+.pagination {
+  ::ng-deep {
+    .p-paginator {
+      background: none !important;
+      justify-content: end !important;
+    }
+
+    .p-paginator {
+      button {
+        border-radius: 8px;
+        border: 1px solid #0000001a;
+        background: #FFFFFF;
+      }
+    }
+
+    .p-paginator-page.p-paginator-page-selected {
+      background: #E6FBFB !important;
+      color: #666666 !important;
+      border: none;
+    }
+  }
+
+}

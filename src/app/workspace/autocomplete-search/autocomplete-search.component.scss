@@ -1,0 +1,34 @@
+:host::ng-deep {
+  .p-inputtext {
+    width: 500px;
+  }
+
+  .p-autocomplete {
+    width: 100%;
+  }
+}
+
+::ng-deep .p-autocomplete-list {
+  gap: 0.5rem !important;
+}
+
+::ng-deep .p-autocomplete-option {
+  padding: 6px 10px !important;
+}
+
+/* Overlay panel smooth transition */
+::ng-deep .p-autocomplete-panel {
+  @apply shadow-lg rounded-lg;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Larger product image with hover effect */
+.product-thumb {
+  @apply w-10 h-auto object-cover rounded-md transition-transform duration-200;
+}
+
+.product-thumb:hover {
+  transform: scale(1.1);
+}
