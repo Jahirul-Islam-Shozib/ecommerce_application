@@ -1,3 +1,182 @@
-.product-container{
+.product-container {
   height: 100%;
+}
+
+.vertical-line {
+  position: relative;
+}
+
+.vertical-line::after {
+  content: "";
+  height: 100%;
+  width: 1px;
+  background-color: #D7EBEB;
+  position: absolute;
+  top: 0;
+  right: -6%;
+}
+
+.product-empty {
+  padding: 18px;
+  border: 1px dashed #e5e7eb;
+  border-radius: 14px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.pagination {
+  ::ng-deep {
+    .p-paginator {
+      background: none !important;
+      justify-content: end !important;
+    }
+
+    .p-paginator {
+      button {
+        border-radius: 8px;
+        border: 1px solid #0000001a;
+        background: #FFFFFF;
+      }
+    }
+
+    .p-paginator-page.p-paginator-page-selected {
+      background: #E6FBFB !important;
+      color: #666666 !important;
+      border: none;
+    }
+  }
+}
+
+.filter-chips ::ng-deep .p-chip {
+  background-color: #f0f9f9;
+  color: #0f766e;
+  padding: 4px 10px;
+  font-size: 13px;
+  border-radius: 16px;
+  border: 1px solid #bde5e5;
+}
+
+.filter-chips ::ng-deep .p-chip-remove-icon {
+  color: #0f766e;
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.filter-chips ::ng-deep .p-chip:hover {
+  background-color: #e6fbfb;
+}
+
+
+.product-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)); // mobile 2
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); // tablet 3
+  }
+}
+
+/* Laptop: 4 products */
+@media (min-width: 1024px) {
+  .product-layout {
+    gap: 36px; // ✅ default gap 16px for all (laptop + large)
+  }
+
+  .product-layout.drawer-open {
+    gap: 28px; // ✅ default gap 16px for all (laptop + large)
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)); // ✅ laptop 4
+  }
+
+  /* ✅ If drawer is open, override to 3 columns */
+  .product-layout.drawer-open .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Very large screen: 5 products */
+@media (min-width: 1536px) {
+  .product-layout {
+    gap: 80px; // ✅ default gap 16px for all (laptop + large)
+  }
+
+  .product-layout.drawer-open {
+    gap: 48px; // ✅ default gap 16px for all (laptop + large)
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr)); // ✅ very large 5
+  }
+
+  /* ✅ If drawer is open, override to 4 columns */
+  .product-layout.drawer-open .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+
+////////////////////////////////////////////////////// Cart drawer ////////////////////////////////////////////////////
+.cart-container {
+  position: fixed;
+  top: 40%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 9999;
+
+  .cart-box {
+    width: 80px;
+    height: 160px;
+
+    .box-1, .box-2 {
+      height: 50%;
+      background: #BEE5E4;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+
+      img {
+        width: 28px;
+        height: 28px;
+      }
+
+      p {
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+
+    .box-1 {
+      border-top-left-radius: 8px;
+    }
+
+    .box-2 {
+      border-bottom-left-radius: 8px;
+    }
+
+    ::ng-deep .p-divider {
+      padding: 0;
+      margin: 1px;
+    }
+  }
+}
+
+.checkout-drawer-content {
+  width: 100%;
+  height: calc(88vh);
+  position: sticky;
+  top: 80px;
+  background: transparent;
+  padding: 1rem;
+  border-left: 1px solid #D7EBEB;
+
+  .checkout-items {
+    height: 77%;
+    overflow-y: auto;
+  }
 }

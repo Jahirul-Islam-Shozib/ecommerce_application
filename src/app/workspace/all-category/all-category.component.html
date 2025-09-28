@@ -1,0 +1,25 @@
+<div class="bg-white rounded-md mb-4 all-category-container">
+  <div class="flex justify-between items-center mb-3">
+    <h2 class="text-xl font-bold hidden md:block">All Category</h2>
+    <a class="cursor-pointer reset-link" (click)="onReset()"> Reset</a>
+  </div>
+  <p-divider></p-divider>
+
+  <div class="mt-4 grid grid-cols-2 gap-3">
+    <div
+      *ngFor="let c of categories"
+      (click)="selectCategory(c.key)"
+      class="flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition
+             bg-[#fff] border-[#ECECEC] text-[#7E7E7E]
+             hover:border-[#002D2C] hover:text-[#002D2C]"
+      [ngClass]="{
+        '!border-[#002D2C] !text-[#002D2C] !bg-[#F4F8F8]': isSelected(c.key)
+         }"
+    >
+      <div class="flex flex-col gap-2 p-2 items-center h-14">
+        <i class="pi text-[14px] opacity-90" [ngClass]="c.icon"></i>
+        <span class="leading-none">{{ c.label }}</span>
+      </div>
+    </div>
+  </div>
+</div>

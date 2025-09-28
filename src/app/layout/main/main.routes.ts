@@ -13,6 +13,10 @@ export const mainRoutes: Routes = [
       {
         path: 'products',
         loadComponent: () => import('../../workspace/all-products/all-products.component').then(m => m.AllProductsComponent),
+      },
+      {
+        path: 'my-orders',
+        loadComponent: () => import('../../workspace/orders/my-orders/my-orders.component').then(m => m.MyOrdersComponent),
       }
     ]
   }

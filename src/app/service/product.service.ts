@@ -1,15 +1,18 @@
 import {computed, Injectable, signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {environment} from "../../environments/environment";
+import {OrderItemPayload} from "../models/order";
 
 export interface Product {
-  id: number;
+  _id: string;
   brand: string;
-  weight: string;
+  weightValue: number | any;
+  weightUnit: string;
   name: string;
   originalPrice: number;
   discountedPrice: number;
-  imageUrl: string;
+  image: string;
 }
 
 export interface CartItem {
@@ -17,88 +20,19 @@ export interface CartItem {
   quantity: number;
 }
 
+const CART_STORAGE_KEY = 'sq_employee_cart';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
-  private popularProducts = signal<Product[]>([
-    {
-      "id" : 1,
-      "brand": "MAYA",
-      "name": "MAYA Marula Moisturizing & Glowing Cream",
-      "weight": "50 ml",
-      "originalPrice": 120,
-      "discountedPrice": 110,
-      "imageUrl" : "assets/images/maya/Maya-Marula-Cream-Product-img.png"
-    },
-    {
-      "id" : 2,
-      "brand": "Maxclean",
-      "name": "Maxclean Liquid Dishwash",
-      "weight": "75 ml",
-      "originalPrice": 120,
-      "discountedPrice": 110,
-      "imageUrl" : "assets/images/max-clean.png"
-    },
-    {
-      "id" : 3,
-      "brand": "Revive",
-      "name": "Revive Daily Moisturizer Sunscreen",
-      "weight": "50 ml",
-      "originalPrice": 800,
-      "discountedPrice": 750,
-      "imageUrl" : "assets/images/revive.png"
-    },
-    {
-      "id" : 4,
-      "brand": "MAYA",
-      "name": "MAYA Rosehip Oil & Acne Control Gel Cream",
-      "weight": "50 ml",
-      "originalPrice": 350,
-      "discountedPrice": 320,
-      "imageUrl" : "assets/images/maya/Maya-Rosehip-Cream-Product-img.png"
-    },
-    {
-      "id" : 5,
-      "brand": "Meril",
-      "name": "Meril Vitamin C Soap Bar - Lemon & Lime",
-      "weight": "100 gm",
-      "originalPrice": 45,
-      "discountedPrice": 45,
-      "imageUrl" : "assets/images/meril/meril-baby/meril-vitamin-c-soap-bar.png"
-    },
-    {
-      "id" : 6,
-      "brand": "Sepnil",
-      "name": "Sepnil Natural Sanitizing Handwash - Magnolia",
-      "weight": "200 ml",
-      "originalPrice": 120,
-      "discountedPrice": 120,
-      "imageUrl" : "assets/images/sepnil-magnolia.png"
-    },
-    {
-      "id" : 7,
-      "brand": "White Plus",
-      "name": "White-plus Toothpaste",
-      "weight": "100 gm",
-      "originalPrice": 275,
-      "discountedPrice": 230,
-      "imageUrl" : "assets/images/white-plus.png"
-    },
-    {
-      "id" : 8,
-      "brand": "Chaka",
-      "name": "Chaka Advance White Ball Soap",
-      "weight": "130 gm",
-      "originalPrice": 50,
-      "discountedPrice": 50,
-      "imageUrl" : "assets/images/chaka-powder.png"
-    }
-  ])
+  private readonly baseUrl = `${environment.API_BASE_URL}/products`;
+  private popularProducts = signal<Product[]>([])
 
-  private bestDealsProducts = signal<Product[]>([
+  private bestDealsProducts = signal<any[]>([
     {
       id: 11,
       brand: 'Chaka',
@@ -132,48 +66,172 @@ export class ProductService {
   getBestDealProducts = computed(() => this.bestDealsProducts())
 
 
-  private cart = signal<CartItem[]>([])
+  private cart = signal<CartItem[]>(this.loadCartFromStorage())
   getCart = computed(() => this.cart())
   getCartItemCount = computed(() => this.cart().reduce((acc, item) => acc + item.quantity, 0))
 
+  // ------------ CART PERSISTENCE HELPERS ---------------
+
+  private loadCartFromStorage(): CartItem[] {
+    if (typeof window === 'undefined') return [];
+    try {
+      const raw = localStorage.getItem(CART_STORAGE_KEY);
+      return raw ? (JSON.parse(raw) as CartItem[]) : [];
+    } catch (e) {
+      console.warn('Failed to parse stored cart:', e);
+      return [];
+    }
+  }
+
+  private syncCartToStorage(cart: CartItem[]): void {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch (e) {
+      console.warn('Failed to save cart to storage:', e);
+    }
+  }
+
+
+  // addToCart(product: Product) {
+  //   this.cart.update(previousCart => {
+  //     const existingItem = previousCart.find(item => item.product._id === product._id);
+  //     if (existingItem) {
+  //       return previousCart.map(item => item.product._id === product._id ? {
+  //         ...item,
+  //         quantity: item.quantity + 1
+  //       } : item);
+  //     } else {
+  //       return [...previousCart, {product, quantity: 1}]
+  //     }
+  //   })
+  // }
+  //
+  // decreaseFromCart(product: Product) {
+  //   this.cart.update(previousCart =>
+  //     previousCart
+  //       .map(item =>
+  //         item.product._id === product._id
+  //           ? {...item, quantity: item.quantity - 1}
+  //           : item
+  //       )
+  //       .filter(item => item.quantity > 0)
+  //   );
+  // }
+  //
+  // removeFromCart(product: Product) {
+  //   this.cart.update(previousCart =>
+  //     previousCart.filter(item => item.product._id !== product._id)
+  //   );
+  // }
+  //
+  // clearCart() {
+  //   this.cart.set([]);
+  // }
 
   addToCart(product: Product) {
-    console.log(product)
-    this.cart.update(previousCart => {
-      const existingItem = previousCart.find(item => item.product.id === product.id);
+    console.log('hi')
+    this.cart.update((previousCart) => {
+      const existingItem = previousCart.find(
+        (item) => item.product._id === product._id,
+      );
+
+      let updatedCart: CartItem[];
       if (existingItem) {
-        return previousCart.map(item => item.product.id === product.id ? {...item, quantity: item.quantity + 1} : item);
-      } else{
-        return [...previousCart, {product, quantity: 1}]
+        updatedCart = previousCart.map((item) =>
+          item.product._id === product._id
+            ? {...item, quantity: item.quantity + 1}
+            : item,
+        );
+      } else {
+        updatedCart = [...previousCart, {product, quantity: 1}];
       }
-    })
+
+      this.syncCartToStorage(updatedCart);
+      return updatedCart;
+    });
   }
 
   decreaseFromCart(product: Product) {
-    this.cart.update(previousCart =>
-      previousCart
-        .map(item =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
+    this.cart.update((previousCart) => {
+      const updatedCart = previousCart
+        .map((item) =>
+          item.product._id === product._id
+            ? {...item, quantity: item.quantity - 1}
+            : item,
         )
-        .filter(item => item.quantity > 0)
-    );
+        .filter((item) => item.quantity > 0);
+
+      this.syncCartToStorage(updatedCart);
+      return updatedCart;
+    });
   }
 
   removeFromCart(product: Product) {
-    this.cart.update(previousCart =>
-      previousCart.filter(item => item.product.id !== product.id)
-    );
+    this.cart.update((previousCart) => {
+      const updatedCart = previousCart.filter(
+        (item) => item.product._id !== product._id,
+      );
+      this.syncCartToStorage(updatedCart);
+      return updatedCart;
+    });
   }
 
   clearCart() {
+    const empty: CartItem[] = [];
     this.cart.set([]);
+    this.syncCartToStorage([]); // 🔥 also clear from localStorage
   }
 
-  getAllProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>('assets/data/product.json');
+  getAllProducts(page?: number, size?: number, brands?: string[], category?: string[]): Observable<{ data: Product[], total: number }> {
+    let params = new HttpParams()
+
+    if (page !== undefined && size !== undefined) {
+      params = params.set('page', page.toString()).set('size', size.toString());
+    }
+
+    const body: any = {
+      brands: brands?.length ? brands : [],
+    };
+
+    // ✅ send category only when selected
+    if (category) {
+      body.category = category;
+    }
+
+    return this.http.post<{ data: Product[], total: number }>(
+      `${this.baseUrl}/list`,
+      body,
+      {params}
+    );
   }
+
+  getProductListById(id: string): Observable<{ data: Product[]; total: number }> {
+    return this.http.get<{ data: Product[]; total: number }>(
+      `${this.baseUrl}/${id}`
+    );
+  }
+
+  setCartFromOrderItems(items: OrderItemPayload[]) {
+    const cartItems: CartItem[] = items.map((item) => ({
+      product: {
+        _id: item.productId,
+        name: item.productName,
+        weightValue: Number(item.weightValue), // ✅ ensure number
+        weightUnit: item.weightUnit,
+        discountedPrice: item.pricePerUnit,
+        originalPrice: item.pricePerUnit,
+        brand: item.brand ?? '',
+        image: item.image ?? '',
+      },
+      quantity: item.quantity,
+    }));
+
+    // 🔥 overwrite cart with reordered items
+    this.cart.set(cartItems);
+    this.syncCartToStorage(cartItems);
+  }
+
 
   // getAllPopularProducts(): Observable<Product[]> {
   //   return this.http.get<Product[]>('assets/data/popular-products.json');

@@ -1,8 +1,16 @@
-<div class="slider bg-blue-100 rounded-md">
-  <img
-    *ngFor="let image of imageList; let i = index"
-    [src]="image.src"
-    [alt]="image.alt"
-    [class.active]="i === currentIndex"
-  />
+<div class="campaign-wrapper">
+  <div class="slider bg-blue-100 rounded-md">
+    <img
+      *ngFor="let image of imageList; let i = index"
+      [src]="image.src"
+      [alt]="image.alt"
+      [class.active]="i === currentIndex"
+    />
+  </div>
+
+  <div class="overlay"></div>
+
+  <div class="shop-btn">
+    <p-button label="Shop Now" outlined severity="secondary" routerLink="/products"></p-button>
+  </div>
 </div>

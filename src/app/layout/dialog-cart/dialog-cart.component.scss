@@ -13,4 +13,33 @@
   ::ng-deep.p-dialog-header {
     padding: 0.5rem !important;
   }
+
+  /*  ::ng-deep.copy-btn{
+      color: #0D9488 !important;
+    }*/
 }
+
+.delivery-option {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d0e5df;
+  border-radius: 8px;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    border-color: #27BCB8;
+  }
+
+  &.selected {
+    border-color: #27BCB8;
+    background-color: #f4fcf9;
+    color: #002D2C;
+  }
+}
+
+//::ng-deep.p-dialog-header {
+//  padding: 0 !important;
+//}

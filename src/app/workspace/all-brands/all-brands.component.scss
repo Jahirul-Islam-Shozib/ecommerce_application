@@ -1,6 +1,54 @@
-.all-brands-container{
-  border: 1px solid #D7EBEB;
-  .brand-name{
+.all-brands-container {
+  //border: 1px solid #D7EBEB;
+  height: 100%;
+  position: relative;
+
+  .brand-names {
+    height: 80vh;
+    //overflow-y: scroll;
+    overflow: auto;
+  }
+
+  h2 {
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    z-index: 10;
+  }
+
+  .brand-name {
+    color: #1B3B2F;
+  }
+
+  .reset-link{
     color: #7E7E7E;
+    font-size: 14px;
+  }
+
+
+  // ✅ Very large screens: 2 columns
+  @media (min-width: 1536px) { // Tailwind 2xl breakpoint
+    .brand-names {
+      height: 60vh;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      height: 20px;
+    }
+
+    .brand-item {
+      width: 100%;
+    }
   }
 }

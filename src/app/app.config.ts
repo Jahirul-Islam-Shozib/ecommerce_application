@@ -9,11 +9,9 @@ import {provideHttpClient, withFetch} from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
 import { routes } from './app.routes';
-import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,7 +29,7 @@ export const appConfig: ApplicationConfig = {
 
     // ✅ Correct way: use AngularFire to initialize Firebase & Firestore
     importProvidersFrom([
-      provideFirebaseApp(() => initializeApp(environment.firebase)),
+      // provideFirebaseApp(() => initializeApp(environment.firebase)),
       provideFirestore(() => getFirestore()), // ✅ Don't pass firebaseApp manually
     ])
   ],

@@ -1,1 +1,16 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+app-root, .app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex: 1;
+  padding: 0 1.5rem
+}
 

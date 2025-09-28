@@ -1,4 +1,18 @@
-.website_logo{
-  width: 150px;
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #fff;
+  transition: box-shadow 0.25s ease;
+  border-bottom: 1px solid #d6eceb;
+}
+
+.navbar.scrolled {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border: none;
+}
+
+.website_logo {
+  width: 90px;
   height: auto;
 }

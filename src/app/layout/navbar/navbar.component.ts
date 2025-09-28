@@ -1,16 +1,28 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {Router, RouterLink} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {DropdownModule} from "primeng/dropdown";
-import {Select} from "primeng/select";
-import {ProductService} from "../../service/product.service";
+import {Product, ProductService} from "../../service/product.service";
 import {BadgeModule} from 'primeng/badge';
 import {OverlayBadgeModule} from 'primeng/overlaybadge';
-import {CommonModule, isPlatformBrowser} from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {DialogModule} from 'primeng/dialog';
 import {DialogCartComponent} from "../dialog-cart/dialog-cart.component";
 import {CartStateService} from "../../service/cart-state.service";
+import {AutocompleteSearchComponent} from "../../workspace/autocomplete-search/autocomplete-search.component";
+import {MessageService} from "primeng/api";
+import {Select} from "primeng/select";
+import {AuthService, AuthUser} from "../../service/auth.service";
+import {Subscription} from "rxjs";
 
+interface SignUpUser {
+  name: string;
+  company: string;
+  employeeId: string;
+  phone: string;
+  email: string;
+  password: string;
+}
 
 @Component({
   selector: 'app-navbar',
@@ -21,42 +33,106 @@ import {CartStateService} from "../../service/cart-state.service";
     OverlayBadgeModule,
     FormsModule,
     DropdownModule,
-    Select,
     CommonModule,
     DialogModule,
-    DialogCartComponent
+    DialogCartComponent,
+    AutocompleteSearchComponent,
+    Select
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent implements OnInit {
-  selectedSearch: any;
-  cartDialogVisible: boolean = false;
-  isBrowser: boolean = false;
 
-  searchOptions = [
-    {label: 'Pizza', value: 'pizza'},
-    {label: 'Burger', value: 'burger'},
-    {label: 'Pasta', value: 'pasta'},
-    {label: 'Pepsi', value: 'pepsi'},
-    {label: 'Coke', value: 'coke'}
+export class NavbarComponent implements OnInit, OnDestroy {
+  cartDialogVisible: boolean = false;
+  private subs = new Subscription();
+
+  products: any[] = [];
+  currentUser: AuthUser | null = null;
+  isMobile: boolean = false;
+  isScrolled = false;
+  userMenuOptions = [
+    {label: 'Profile', value: 'profile'},
+    {label: 'Orders', value: 'orders'},
+    {label: 'Logout', value: 'logout'}
   ];
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.isMobile = window.innerWidth < 768;
+  }
+
+  // ✅ add scroll listener
+  @HostListener('window:scroll', [])
+  onScroll() {
+    this.isScrolled = window.scrollY > 10;
+  }
 
   constructor(public productService: ProductService,
               public cartState: CartStateService,
-              @Inject(PLATFORM_ID) private platformId: Object
+              private router: Router,
+              private messageService: MessageService,
+              private authService: AuthService,
   ) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
-
   }
 
   ngOnInit(): void {
+    this.loadCurrentUser();
+    this.isMobile = window.innerWidth < 768;
+    this.onScroll();
+
+    this.subs.add(
+      this.cartState.openCartDialog$.subscribe(() => {
+        this.openCart();
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
+
+  loadCurrentUser(): void {
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
+  }
+
+  get isLoggedIn(): boolean {
+    return !!this.currentUser;
+  }
+
+  onUserOptionChange(action: string | null) {
+    if (!action) return;
+
+    switch (action) {
+      case 'profile':
+        this.router.navigate(['/profile']); // adjust route if needed
+        break;
+
+      case 'orders':
+        this.router.navigate(['/my-orders']); // adjust route if needed
+        break;
+
+      case 'logout':
+        this.authService.logout();
+        this.router.navigate(['/auth/login']);
+        break;
+    }
   }
 
   openCart() {
-    if (this.isBrowser) {
-      this.cartDialogVisible = true;
+    console.log(this.productService.getCart());
+    if (this.productService.getCartItemCount() === 0) {
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Cart Empty',
+        detail: 'Cart has no product. Please select a product.',
+        life: 1500
+      });
+      return;
     }
+    this.cartDialogVisible = true;
   }
 
 }

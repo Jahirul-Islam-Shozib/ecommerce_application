@@ -6,3 +6,24 @@
 .container {
   @apply max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  margin-right: 0.2rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
