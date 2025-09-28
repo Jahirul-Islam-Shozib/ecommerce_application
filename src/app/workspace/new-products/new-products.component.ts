@@ -13,23 +13,23 @@ import {NgForOf} from "@angular/common";
 export class NewProductsComponent {
   newProducts = [
     {
-      name: 'Maya All Natural Olive Oil',
-      price: 120,
+      name: 'MAYA All Natural Cold-pressed Olive Oil -120 ml',
+      price: 650,
       image: 'assets/images/maya/Maya-Olive-Oil.png'
     },
     {
-      name: 'Maya Rosehip Oil & Acne Control Gel Cream',
-      price: 80,
+      name: 'Maya Rosehip Oil & Acne Control Gel Cream - 50 ml',
+      price: 230,
       image: 'assets/images/maya/Maya-Rosehip-Cream-Product-img.png'
     },
     {
-      name: 'Maya Argan Oil',
-      price: 60,
+      name: 'MAYA All Natural Moroccan Argan Oil -30 ml',
+      price: 850,
       image: 'assets/images/maya/Maya-Argan-Oil.png'
     },
     {
-      name: 'Maya Castor Oil',
-      price: 150,
+      name: 'MAYA All Natural Cold-pressed Castor Oil -120 ml',
+      price: 450,
       image: 'assets/images/maya/Maya-Castor-Oil.png'
     }
   ];

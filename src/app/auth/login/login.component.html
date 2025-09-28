@@ -1,5 +1,8 @@
 <div class="login-container">
   <div class="login-content">
+    <div class="flex items-center logo-section space-x-2" routerLink="/">
+      <img src="assets/images/ecom_logo.png" class="website_logo" alt="app-logo">
+    </div>
     <h1>Login</h1>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -10,9 +13,9 @@
         <p-inputgroup-addon>
           <span>+88</span>
         </p-inputgroup-addon>
-        <input pInputText formControlName="phoneNumber" placeholder="01XXXXXXXXX"/>
+        <input pInputText formControlName="identifier" placeholder="01XXXXXXXXX"/>
       </p-inputgroup>
-      <div class="error" *ngIf="loginForm.get('phoneNumber')?.touched && loginForm.get('phoneNumber')?.invalid">
+      <div class="error" *ngIf="loginForm.get('identifier')?.touched && loginForm.get('identifier')?.invalid">
         Enter a valid phone number
       </div>
 
@@ -44,3 +47,5 @@
     </p>
   </div>
 </div>
+
+<p-toast></p-toast>

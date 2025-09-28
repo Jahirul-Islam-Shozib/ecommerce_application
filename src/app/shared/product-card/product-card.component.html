@@ -1,0 +1,78 @@
+<div class="group bg-white border border-[#D7EBEB] rounded-lg md:p-4 p-2 relative h-full">
+  <div>
+    <div
+      class="bg-[#DFEEEE] rounded-lg overflow-hidden p-2 h-[150px] flex items-center justify-center bg-transparent">
+      <!--            <img [src]="'data:image/png;base64,' + product.image" alt="{{product.name}}" class="h-full object-contain"/>-->
+      <img
+        [src]="product.image"
+        [alt]="product.name"
+        class="h-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2 group-hover:scale-105"
+      />
+    </div>
+    <div class="flex justify-between text-xs text-gray-400 mt-2 mb-1">
+      <span>{{ product.brand }}</span>
+      <span>{{ product.weightValue }} {{ product.weightUnit }}</span>
+    </div>
+  </div>
+
+  <div class="mt-2">
+    <p class="text-sm text-[#1b3b2f] font-medium leading-tight">
+      {{ product.name }}
+    </p>
+  </div>
+
+  <div class="mt-4 flex items-end justify-between">
+    <div>
+      <p class="text-sm text-gray-400 line-through" *ngIf="hasDiscount">
+        {{ product.originalPrice }}৳
+      </p>
+      <!--            <p class="text-xl font-bold text-[#1b3b2f] -mt-1">{{ product.discountedPrice }}৳</p>-->
+
+      <!-- Discounted price -->
+      <p class="text-xl font-bold text-[#1b3b2f] -mt-1">
+        <ng-container *ngIf="qty === 0; else discTotal">
+          {{ product.discountedPrice }}৳
+        </ng-container>
+        <ng-template #discTotal>
+          {{ displayPrice }}৳
+        </ng-template>
+      </p>
+    </div>
+
+    <!-- Show Add button when qty = 0 -->
+    <ng-container *ngIf="qty === 0; else qtyControls">
+      <button
+        class="flex items-center gap-2 text-sm bg-[#e6fbfb] hover:bg-[#d1f7f7]
+           text-[#2F5249] font-medium py-1 px-3 rounded border border-[#bde5e5]"
+        (click)="onAdd()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor">
+          <path
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2 4m2-4l1.5 4M17 13l1.5 4m-1.5-4l2-4M9 21a1 1 0 100-2 1 1 0 000 2z"/>
+        </svg>
+        Add
+      </button>
+    </ng-container>
+
+    <!-- After Add → show - qty + -->
+    <ng-template #qtyControls>
+      <div class="flex items-center justify-between bg-[#e6fbfb] px-4 w-24 rounded border border-[#bde5e5]">
+        <button
+          class="text-[#27BCB8] text-xl font-bold"
+          (click)="onDecrement()">
+          −
+        </button>
+        <span class="text-gray-700 font-semibold">
+                {{ qty }}
+                 </span>
+        <button
+          class="text-[#27BCB8] text-xl font-bold"
+          (click)="onIncrement()">
+          +
+        </button>
+      </div>
+    </ng-template>
+
+  </div>
+</div>

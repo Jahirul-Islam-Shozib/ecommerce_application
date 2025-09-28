@@ -1,8 +1,8 @@
-<app-navbar></app-navbar>
-<div class="container">
+<div [ngClass]="{ 'container': !isAuthPage }">
   <router-outlet></router-outlet>
 </div>
 <div>
   <app-footer></app-footer>
 </div>
 
+<p-toast></p-toast>

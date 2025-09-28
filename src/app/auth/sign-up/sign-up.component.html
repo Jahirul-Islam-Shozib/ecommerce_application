@@ -1,13 +1,14 @@
 <div class="signUp-container">
   <div class="signUp-content">
+    <div class="flex items-center space-x-2 logo-section" routerLink="/">
+      <img src="assets/images/ecom_logo.png" class="website_logo" alt="app-logo">
+    </div>
     <div class="header-group">
       <h1>Create account</h1>
       <p>Square Employee Registration Only</p>
     </div>
 
-
     <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
-
       <!-- Name -->
       <label>Your Name*</label>
       <input
@@ -26,7 +27,8 @@
       <p-select
         [options]="companies"
         formControlName="company"
-        optionLabel="name"
+        optionLabel="label"
+        optionValue="value"
         placeholder="Select your company"
         class="w-full"/>
       <div class="error" *ngIf="signUpForm.get('company')?.touched && signUpForm.get('company')?.invalid">
@@ -44,6 +46,32 @@
       />
       <div class="error" *ngIf="signUpForm.get('employeeId')?.touched && signUpForm.get('employeeId')?.invalid">
         Employee ID is required
+      </div>
+
+      <!-- Designation -->
+      <label>Your Designation*</label>
+      <input
+        pInputText
+        type="text"
+        id="designation"
+        placeholder="Type here"
+        formControlName="designation"
+      />
+      <div class="error" *ngIf="signUpForm.get('name')?.touched && signUpForm.get('name')?.invalid">
+        Field is required
+      </div>
+
+      <!-- Department -->
+      <label>Department*</label>
+      <input
+        pInputText
+        type="text"
+        id="department"
+        placeholder="Type here"
+        formControlName="department"
+      />
+      <div class="error" *ngIf="signUpForm.get('name')?.touched && signUpForm.get('name')?.invalid">
+        Field is required
       </div>
 
       <!-- Phone -->
@@ -88,3 +116,4 @@
   </div>
 </div>
 
+<p-toast></p-toast>

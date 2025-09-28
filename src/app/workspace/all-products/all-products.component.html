@@ -1,58 +1,153 @@
-<div class="product-container grid grid-cols-12 gap-6 container mt-10">
+<div class="product-container grid grid-cols-12 gap-6 mt-6">
 
-  <div class="col-span-12 md:col-span-3 flex flex-col gap-2">
-    <app-all-brands></app-all-brands>
-    <app-new-products></app-new-products>
+  <div class="col-span-12 md:col-span-3 hidden md:block">
+    <div class="sticky top-20 flex flex-col gap-2"> <!-- 🔥 sticky wrapper -->
+      <app-all-brands
+        [selectedBrandNames]="selectedBrands"
+        (brandsChange)="onBrandsChange($event)">
+      </app-all-brands>
+      <app-new-products></app-new-products>
+    </div>
   </div>
+
+  <div *ngIf="isMobile" class="col-span-12 sticky top-16 z-10 block md:hidden">
+    <div class="block md:hidden">
+      <app-autocomplete-search>
+      </app-autocomplete-search>
+    </div>
+  </div>
+
 
   <!-- Right Content -->
-  <div class="col-span-12 md:col-span-9 flex flex-col gap-6">
-    <h1 class="text-2xl font-bold">All Products</h1>
+  <div class="col-span-12 md:col-span-9 flex flex-col gap-6 md:mt-4 sm:mt-2">
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div
-        *ngFor="let product of productService.getPopularProducts()"
-        class="bg-white border border-[#D7EBEB] rounded-lg p-4 relative">
-
-        <div>
-          <div class="bg-[#DFEEEE] rounded-lg overflow-hidden p-4 h-[150px] flex items-center justify-center">
-            <img [src]="product.imageUrl" alt="{{product.name}}" class="h-full object-contain"/>
-          </div>
-          <div class="flex justify-between text-xs text-gray-400 mt-2 mb-1">
-            <span>{{ product.brand }}</span>
-            <span>{{ product.weight }}</span>
-          </div>
-        </div>
-
-        <div class="mt-2">
-          <p class="text-sm text-[#1b3b2f] font-medium leading-tight">
-            {{ product.name }}
-          </p>
-        </div>
-
-        <div class="mt-4 flex items-end justify-between">
-          <div>
-            <p class="text-sm text-gray-400 line-through" *ngIf="product.originalPrice !== product.discountedPrice">
-              {{ product.originalPrice }}৳
-            </p>
-            <p class="text-xl font-bold text-[#1b3b2f] -mt-1">{{ product.discountedPrice }}৳</p>
-          </div>
-
-          <button class="flex items-center gap-2 text-sm bg-[#e6fbfb] hover:bg-[#d1f7f7]
-        text-[#2F5249] font-medium py-1 px-3 rounded border border-[#bde5e5]">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                 stroke="currentColor">
-              <path
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2 4m2-4l1.5 4M17 13l1.5 4m-1.5-4l2-4M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
-            </svg>
-            Add
-          </button>
-        </div>
-      </div>
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl font-bold">All Products</h1>
+      <span *ngIf="isMobile" class="pi pi-sliders-h" style="font-size: 1.2rem" (click)="drawerVisible = true"></span>
     </div>
 
-    <div class="mt-20">
-      <app-best-deals-products></app-best-deals-products>
+    <div *ngIf="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <p-skeleton *ngFor="let i of [1,2,3,4,5,6,7,8]" height="250px" borderRadius="12px"></p-skeleton>
     </div>
+
+    <div *ngIf="!loading && products" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      <app-product-card
+        *ngFor="let product of products"
+        class="h-full"
+        [product]="product"
+        [qty]="getQty(product)"
+        (add)="onAddClick($event)"
+        (increment)="increment($event)"
+        (decrement)="decrement($event)"
+      ></app-product-card>
+
+
+      <!--      <div-->
+      <!--        *ngFor="let product of products"-->
+      <!--        class="group bg-white border border-[#D7EBEB] rounded-lg md:p-4 p-2 relative">-->
+
+      <!--        <div>-->
+      <!--          <div-->
+      <!--            class="bg-[#DFEEEE] rounded-lg overflow-hidden p-2 h-[150px] flex items-center justify-center bg-transparent">-->
+      <!--            &lt;!&ndash;            <img [src]="'data:image/png;base64,' + product.image" alt="{{product.name}}" class="h-full object-contain"/>&ndash;&gt;-->
+      <!--            <img-->
+      <!--              [src]="product.image"-->
+      <!--              [alt]="product.name"-->
+      <!--              class="h-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2 group-hover:scale-105"-->
+      <!--            />-->
+      <!--          </div>-->
+      <!--          <div class="flex justify-between text-xs text-gray-400 mt-2 mb-1">-->
+      <!--            <span>{{ product.brand }}</span>-->
+      <!--            <span>{{ product.weightValue }} {{ product.weightUnit }}</span>-->
+      <!--          </div>-->
+      <!--        </div>-->
+
+      <!--        <div class="mt-2">-->
+      <!--          <p class="text-sm text-[#1b3b2f] font-medium leading-tight">-->
+      <!--            {{ product.name }}-->
+      <!--          </p>-->
+      <!--        </div>-->
+
+      <!--        <div class="mt-4 flex items-end justify-between">-->
+      <!--          <div>-->
+      <!--            <p class="text-sm text-gray-400 line-through" *ngIf="product.originalPrice !== product.discountedPrice">-->
+      <!--              {{ product.originalPrice }}৳-->
+      <!--            </p>-->
+      <!--            &lt;!&ndash;            <p class="text-xl font-bold text-[#1b3b2f] -mt-1">{{ product.discountedPrice }}৳</p>&ndash;&gt;-->
+
+      <!--            &lt;!&ndash; Discounted price &ndash;&gt;-->
+      <!--            <p class="text-xl font-bold text-[#1b3b2f] -mt-1">-->
+      <!--              <ng-container *ngIf="getQty(product) === 0; else discTotal">-->
+      <!--                {{ product.discountedPrice }}৳-->
+      <!--              </ng-container>-->
+      <!--              <ng-template #discTotal>-->
+      <!--                {{ getDiscountedTotal(product) }}৳-->
+      <!--              </ng-template>-->
+      <!--            </p>-->
+      <!--          </div>-->
+
+      <!--          &lt;!&ndash; Show Add button when qty = 0 &ndash;&gt;-->
+      <!--          <ng-container *ngIf="getQty(product) === 0; else qtyControls">-->
+      <!--            <button-->
+      <!--              class="flex items-center gap-2 text-sm bg-[#e6fbfb] hover:bg-[#d1f7f7]-->
+      <!--           text-[#2F5249] font-medium py-1 px-3 rounded border border-[#bde5e5]"-->
+      <!--              (click)="onAddClick(product)"-->
+      <!--            >-->
+      <!--              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"-->
+      <!--                   stroke="currentColor">-->
+      <!--                <path-->
+      <!--                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2 4m2-4l1.5 4M17 13l1.5 4m-1.5-4l2-4M9 21a1 1 0 100-2 1 1 0 000 2z"/>-->
+      <!--              </svg>-->
+      <!--              Add-->
+      <!--            </button>-->
+      <!--          </ng-container>-->
+
+      <!--          &lt;!&ndash; After Add → show - qty + &ndash;&gt;-->
+      <!--          <ng-template #qtyControls>-->
+      <!--            <div class="flex items-center justify-between bg-[#e6fbfb] px-4 w-24 rounded border border-[#bde5e5]">-->
+      <!--              <button-->
+      <!--                class="text-[#27BCB8] text-xl font-bold"-->
+      <!--                (click)="decrement(product)">-->
+      <!--                −-->
+      <!--              </button>-->
+      <!--              <span class="text-gray-700 font-semibold">-->
+      <!--                {{ getQty(product) }}-->
+      <!--                 </span>-->
+      <!--              <button-->
+      <!--                class="text-[#27BCB8] text-xl font-bold"-->
+      <!--                (click)="increment(product)">-->
+      <!--                +-->
+      <!--              </button>-->
+      <!--            </div>-->
+      <!--          </ng-template>-->
+
+      <!--        </div>-->
+      <!--      </div>-->
+    </div>
+
+    <div
+      *ngIf="!loading"
+      class="pagination">
+      <p-paginator
+        [first]="first"
+        [rows]="pageSize"
+        [totalRecords]="totalRecords"
+        (onPageChange)="onPageChange($event)"
+      />
+    </div>
+
+    <!--    <div class="mt-20">-->
+    <!--      <app-best-deals-products></app-best-deals-products>-->
+    <!--    </div>-->
   </div>
+</div>
+<p-toast></p-toast>
+
+<div *ngIf="isMobile">
+  <p-drawer [(visible)]="drawerVisible" header="All Brands" position="right">
+    <app-all-brands
+      [selectedBrandNames]="selectedBrands"
+      (brandsChange)="onBrandsChange($event)">
+    </app-all-brands>
+  </p-drawer>
 </div>

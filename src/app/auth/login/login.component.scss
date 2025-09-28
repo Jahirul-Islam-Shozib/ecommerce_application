@@ -2,10 +2,16 @@
   display: flex;
   justify-content: center;
   height: 100%;
+  gap: 2rem
+}
+
+.website_logo {
+  width: 140px;
+  height: auto;
 }
 
 .login-content {
-  width: 60%;
+  width: 50%;
   height: 100%;
   padding: 5rem;
   margin-top: 7rem;
@@ -78,7 +84,6 @@
   }
 }
 
-
 @media (max-width: 980px) {
   .login-content {
     width: 100%;
@@ -87,7 +92,13 @@
 
 @media (max-width: 480px) {
   .login-content {
-    padding: 2rem;
+    padding: 5rem 2rem 0 2rem;
+    margin-top: 0;
+    box-shadow: none;
+  }
+
+  .logo-section {
+    margin-bottom: 1.5rem;
   }
 }
 

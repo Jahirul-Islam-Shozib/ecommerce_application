@@ -9,11 +9,11 @@
   <p-tabs [(value)]="activeTab">
     <p-tablist>
       <p-tab value="0">Product Cart</p-tab>
-      <p-tab value="1">Checkout</p-tab>
+      <!--      <p-tab value="1">Checkout</p-tab>-->
     </p-tablist>
 
     <p-tabpanel value="0">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-4">
+      <div *ngIf="cartItems().length > 0; else emptyCart" class="grid grid-cols-1 md:grid-cols-12 gap-4 py-4">
         <!-- Left Column: 8/12 on md+, full on mobile -->
         <div class="md:col-span-8 h-auto p-2 md:p-4 rounded-lg">
           <div>
@@ -30,13 +30,19 @@
               <!-- Item Info -->
               <div class="md:col-span-7 flex justify-between items-start space-x-4">
                 <div class="flex gap-4">
-                  <img [src]="item.product.imageUrl" alt="Product"
-                       class="w-24 h-20 bg-[#F9FEFE] rounded-md border p-2 border-gray-200"/>
+                  <!--                  <img [src]="'data:image/png;base64,' + item.product.image" alt="{{item.product.name}}"-->
+                  <!--                       class="w-24 h-24 bg-[#F9FEFE] rounded-md border p-2 border-gray-200"/>-->
+
+                  <img
+                    [src]="item.product.image"
+                    [alt]="item.product.name"
+                    class="w-24 h-24 bg-[#F9FEFE] rounded-md border p-2 border-gray-200"
+                  />
                   <div>
                     <p class="font-medium text-gray-800 leading-snug">
                       {{ item.product.name }}
                     </p>
-                    <p class="text-sm text-gray-500">{{ item.product.weight }}</p>
+                    <p class="text-sm text-gray-500">{{ item.product.weightValue }} {{ item.product.weightUnit }}</p>
                     <p class="text-base font-bold text-gray-800 mt-1">৳{{ item.product.discountedPrice }}</p>
                   </div>
                 </div>
@@ -78,7 +84,8 @@
         </div>
 
         <!-- Right Column: 4/12 on md+, full on mobile -->
-        <div class="md:col-span-4 bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+        <div
+          class="md:col-span-4 bg-white rounded-lg border border-gray-200 p-4 shadow-sm md:sticky md:top-4 self-start h-fit">
           <!-- Promo Code -->
           <div class="flex items-center border border-teal-200 rounded-md overflow-hidden mb-4">
             <input
@@ -139,6 +146,19 @@
           </div>
         </div>
       </div>
+
+      <ng-template #emptyCart>
+        <div class="flex flex-col items-center justify-center py-10 text-center">
+          <p class="text-lg font-semibold text-gray-700 mb-2">No items left in cart</p>
+          <p class="text-sm text-gray-500 mb-4">Please add some products to your cart to see them here.</p>
+          <button
+            class="px-4 py-2 text-sm rounded-md bg-teal-500 hover:bg-teal-600 text-white"
+            (click)="onCloseCart()"
+          >
+            Continue Shopping
+          </button>
+        </div>
+      </ng-template>
     </p-tabpanel>
 
     <p-tabpanel value="1">
@@ -161,10 +181,34 @@
             />
           </div>
 
+          <div class="mt-2 md:mt-0">
+            <h2 class="text-gray-800 font-semibold mb-1">Delivery day</h2>
+
+            <div class="flex gap-3 mt-2">
+              <div
+                *ngFor="let option of deliveryOptions"
+                class="delivery-option flex gap-2 items-center"
+                [ngClass]="{ 'selected': selectedDeliveryDay === option.value }"
+                (click)="selectedDeliveryDay = option.value"
+              >
+                <p-radioButton
+                  name="deliveryDay"
+                  [value]="option.value"
+                  [(ngModel)]="selectedDeliveryDay"
+                  [inputId]="option.value"
+                  [disabled]="option.disabled"
+                  class="flex items-center"
+                ></p-radioButton>
+                <label [for]="option.value" class="cursor-pointer">{{ option.label }}</label>
+              </div>
+            </div>
+          </div>
+
           <!-- Delivery Note -->
           <div>
             <h2 class="text-gray-800 font-semibold mb-1">Add Delivery Note</h2>
             <textarea
+              [(ngModel)]="deliveryNote"
               placeholder="Type delivery note"
               rows="3"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-teal-500"
@@ -239,36 +283,90 @@
     [(visible)]="visibleDialog"
     [modal]="true"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-    [style]="{ width: '30vw' }"
+    [style]="{ width: '40vw' }"
+    header="Order Summary"
   >
-    <div class="bg-white px-4 py-2 pb-4 rounded-lg w-full">
-      <div class="flex flex-col items-center">
-        <!-- Checkmark Icon -->
-        <div class="bg-gray-100 p-6 rounded-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            class="w-16 h-16 text-green-600"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
+
+    <div #summaryText>
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 text-sm text-gray-700">
+        <div class="flex flex-wrap gap-x-8 gap-y-2">
+          <div class="w-full sm:w-[45%]"><strong>Company Name:</strong> {{ employeeInfo?.company }}</div>
+          <div class="w-full sm:w-[45%]"><strong>Name:</strong> {{ employeeInfo?.name }}</div>
+
+          <div class="w-full sm:w-[45%]"><strong>Location:</strong> Pacific Tower</div>
+          <div class="w-full sm:w-[45%]"><strong>Employee ID:</strong> {{ employeeInfo?.employeeId }}</div>
+
+          <div class="w-full sm:w-[45%]"><strong>Department:</strong> {{employeeInfo?.department}}</div>
+          <div class="w-full sm:w-[45%]"><strong>Designation:</strong> {{employeeInfo?.designation}}</div>
+
+          <div class="w-full sm:w-[45%]"><strong>Contact Number:</strong> {{ employeeInfo?.phone }}</div>
         </div>
-        <!-- Success Message -->
-        <h2 class="text-center md:text-2xl text-xl font-semibold text-green-600 mt-4">Order Submitted Successfully!</h2>
-        <!-- Description -->
-        <p class="text-center text-sm text-gray-600 mt-3">
-          Your order has been successfully submitted. We’ll keep you updated on the mail.
-        </p>
+      </div>
+
+      <!--      <pre style="margin: 0;">-->
+
+      <!--      </pre>-->
+
+      <p-table
+        [value]="cartItems()"
+        [tableStyle]="{ 'min-width': '30rem' }"
+      >
+        <ng-template #header>
+          <tr class="text-xs">
+            <th>Sl</th>
+            <th>Product Name</th>
+            <th>Product Amount</th>
+            <th>Quantity</th>
+          </tr>
+        </ng-template>
+
+        <ng-template #body let-product let-i="rowIndex">
+          <tr class="text-sm">
+            <td>{{ i + 1 }}</td>
+            <td>{{ product.product.name }}</td>
+            <td>{{ product.product.weightValue }} {{ product.product.weightUnit }}</td>
+            <td>{{ product.quantity }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <div class="mt-6 bg-gray-50 p-3 rounded-lg">
+      <div class="flex justify-end gap-2">
+        <p-button size="small" label="Cancel" variant="outlined" severity="danger" (click)="onCancel()"/>
+        <p-button size="small" label="Copy" [raised]="true" class="copy-btn" (click)="copyOrderSummary()"/>
       </div>
     </div>
   </p-dialog>
 </div>
 
+<p-toast></p-toast>
 
+
+<!--    <div class="bg-white px-4 py-2 pb-4 rounded-lg w-full">-->
+<!--      <div class="flex flex-col items-center">-->
+<!--        &lt;!&ndash; Checkmark Icon &ndash;&gt;-->
+<!--        <div class="bg-gray-100 p-6 rounded-full">-->
+<!--          <svg-->
+<!--            xmlns="http://www.w3.org/2000/svg"-->
+<!--            fill="none"-->
+<!--            viewBox="0 0 24 24"-->
+<!--            stroke="currentColor"-->
+<!--            class="w-16 h-16 text-green-600"-->
+<!--          >-->
+<!--            <path-->
+<!--              stroke-linecap="round"-->
+<!--              stroke-linejoin="round"-->
+<!--              stroke-width="2"-->
+<!--              d="M5 13l4 4L19 7"-->
+<!--            />-->
+<!--          </svg>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; Success Message &ndash;&gt;-->
+<!--        <h2 class="text-center md:text-2xl text-xl font-semibold text-green-600 mt-4">Order Submitted Successfully!</h2>-->
+<!--        &lt;!&ndash; Description &ndash;&gt;-->
+<!--        <p class="text-center text-sm text-gray-600 mt-3">-->
+<!--          Your order has been successfully submitted. We’ll keep you updated on the mail.-->
+<!--        </p>-->
+<!--      </div>-->
+<!--    </div>-->

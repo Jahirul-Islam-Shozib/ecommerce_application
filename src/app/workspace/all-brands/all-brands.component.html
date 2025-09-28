@@ -1,10 +1,22 @@
 <div class="bg-white rounded-md p-4 mb-4 all-brands-container">
-  <h2 class="text-xl font-bold mb-4 border-b pb-2">All Brands</h2>
-  <ul class="space-y-1">
+  <div class="flex justify-between items-center mb-3">
+    <h2 class="text-xl font-bold hidden md:block">All Brands</h2>
+    <span class="pi pi-refresh cursor-pointer" (click)="onReset()"></span>
+  </div>
+  <p-divider></p-divider>
+  <ul class="space-y-3 brand-names">
     <li
       *ngFor="let brandName of brandNames"
-      class="flex items-center gap-4 p-2 w-100 cursor-pointer">
-      <p-checkbox [inputId]="brandName.key" name="group" [value]="brandName" [(ngModel)]="selectedBrandnames"/>
+      class="flex items-center gap-4 p-2 w-100 cursor-pointer border rounded-md transition-all duration-200 hover:bg-gray-100"
+      [class.checked]="selectedBrandNames.includes(brandName.key)"
+      (click)="toggleBrand(brandName.key)">
+      <p-checkbox class="mb-1"
+                  [inputId]="brandName.key"
+                  name="group"
+                  [value]="brandName.key"
+                  [(ngModel)]="selectedBrandNames"
+                  (ngModelChange)="onBrandsModelChange($event)"
+      />
       <span class="brand-name">{{ brandName.name }}</span>
     </li>
   </ul>
