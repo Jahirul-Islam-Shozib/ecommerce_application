@@ -3,7 +3,13 @@
   <!-- Left Sidebar -->
   <div class="col-span-12 md:col-span-3 flex flex-col gap-2">
     <div class="block md:hidden">
-      <input type="text" pInputText [(ngModel)]="value" placeholder="Search for items..." class="w-full" />
+<!--      <input type="text" pInputText [(ngModel)]="value" placeholder="Search for items..." class="w-full" />-->
+      <app-autocomplete-search
+        [filteredProducts]="filteredProducts"
+        (filterProduct)="filterProduct($event)"
+        (selectProduct)="onProductSelect($event)"
+      >
+      </app-autocomplete-search>
     </div>
     <app-top-brands class="hidden md:block"></app-top-brands>
     <app-new-products class="hidden md:block"></app-new-products>
