@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {NgForOf} from "@angular/common";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-top-brands',
@@ -11,6 +12,10 @@ import {NgForOf} from "@angular/common";
   styleUrl: './top-brands.component.scss'
 })
 export class TopBrandsComponent {
+  @Output() selectedBrand  = new EventEmitter();
+
+  constructor(private router: Router) { }
+
   brands = [
     {
       name: 'Ruchi',
@@ -33,4 +38,12 @@ export class TopBrandsComponent {
       image: 'assets/images/category-logo/maya-logo.jpg'
     }
   ];
+
+  getBrandProduct(brand: any) {
+    this.router.navigate(['/products'], {
+      queryParams: {
+        brand: brand.name
+      }
+    });
+  }
 }

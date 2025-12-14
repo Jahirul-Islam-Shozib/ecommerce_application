@@ -4,13 +4,18 @@
   height: 100%;
 
   .signUp-content {
-    width: 60%;
+    width: 50%;
     height: 100%;
     padding: 5rem;
     margin-top: 7rem;
     border-radius: 10px;
     background: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    .website_logo {
+      width: 140px;
+      height: auto;
+    }
 
     .header-group {
       text-align: center;
@@ -80,3 +85,30 @@
     }
   }
 }
+
+@media (max-width: 980px) {
+  .signUp-container {
+    .signUp-content {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .signUp-container {
+    .signUp-content {
+      padding: 5rem 2rem 0 2rem;
+      margin: 0;
+      box-shadow: none;
+    }
+
+    .logo-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .header-group {
+      margin-bottom: 1rem;
+    }
+  }
+}
+

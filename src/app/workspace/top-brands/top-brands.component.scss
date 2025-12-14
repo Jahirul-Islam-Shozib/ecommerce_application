@@ -1,18 +1,25 @@
-.top-brands-container{
+.top-brands-container {
   border: 1px solid #D7EBEB;
-  .brand-item{
+
+  .brand-item {
     border: 1px solid #D7EBEB;
     background: #FFFFFF;
+    transition: transform 0.4s ease;
 
-    .brand-img{
+    .brand-img {
       width: 50px;
       height: auto;
     }
   }
+
+  .brand-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  }
 }
 
-@media (max-width: 480px){
-  .top-brands-container{
+@media (max-width: 480px) {
+  .top-brands-container {
     border: none;
   }
 }

@@ -1,6 +1,21 @@
-.all-brands-container{
+.all-brands-container {
   border: 1px solid #D7EBEB;
-  .brand-name{
-    color: #7E7E7E;
+  height: 100%;
+  position: relative;
+
+  .brand-names {
+    height: 80vh;
+    overflow-y: scroll;
+  }
+
+  h2 {
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    z-index: 10;
+  }
+
+  .brand-name {
+    color: #1B3B2F;
   }
 }

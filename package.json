@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:ecom_project": "node dist/ecom_project/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -19,11 +18,8 @@
     "@angular/forms": "^18.2.0",
     "@angular/platform-browser": "18.2.13",
     "@angular/platform-browser-dynamic": "^18.2.0",
-    "@angular/platform-server": "^18.2.0",
     "@angular/router": "18.2.13",
-    "@angular/ssr": "^18.2.1",
     "@primeng/themes": "^19.1.3",
-    "express": "^4.18.2",
     "firebase": "^11.10.0",
     "primeicons": "^7.0.0",
     "primeng": "^18.0.2",
