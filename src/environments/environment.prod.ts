@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://api.yourdomain.com',  // 🔥 Docker/prod এ যেটা থাকবে
+  apiBaseUrl: 'http://172.16.234.51:8092',  // 🔥 Docker/prod এ যেটা থাকবে
   firebase: {
     apiKey: 'your-prod-key',
     authDomain: 'your-prod.firebaseapp.com',
