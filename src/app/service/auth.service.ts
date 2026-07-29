@@ -1,9 +1,17 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, tap} from "rxjs";
 import {User} from "../models/User";
-import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+
+export interface LoginResponse {
+  success: boolean;
+  message: string;
+  data: {
+    user: AuthUser;
+    token: string;
+  };
+}
 
 export interface AuthUser {
   _id: string;
@@ -21,9 +29,8 @@ export interface AuthUser {
 })
 
 export class AuthService {
-  private readonly baseUrl = `${environment.API_BASE_URL}/users`;
+  private readonly baseUrl = `${environment.API_BASE_URL}/auth`;
 
-  // 🔥 central auth state
   private currentUserSubject = new BehaviorSubject<AuthUser | null>(this.loadInitialUser());
   currentUser$ = this.currentUserSubject.asObservable();
 
@@ -35,31 +42,34 @@ export class AuthService {
     return this.http.post<User>(`${this.baseUrl}/register`, user);
   }
 
-  // 🔥 login with phone/email + password
-  // login(identifier: string, password: string): Observable<User> {
-  //   return this.http.post<User>(`${this.baseUrl}/login`, {identifier, password});
-  // }
-
-  login(identifier: string, password: string): Observable<AuthUser> {
+  login(identifier: string, password: string): Observable<LoginResponse> {
     return this.http
-      .post<AuthUser>(`${this.baseUrl}/login`, { identifier, password })
+      .post<LoginResponse>(`${this.baseUrl}/login`, {identifier, password})
       .pipe(
-        tap(user => {
-          // 🔒 keep in memory
+        tap(res => {
+          const user = res.data.user;
+          const token = res.data.token;
+
           this.currentUserSubject.next(user);
-          // optional: light persistence (no password, just profile)
           sessionStorage.setItem('currentUser', JSON.stringify(user));
+          localStorage.setItem('token', token);
         })
       );
   }
 
-  logout(): void {
-    this.currentUserSubject.next(null);
-    sessionStorage.removeItem('currentUser');
+  logout(): Observable<any> {
+    return this.http.post(`${this.baseUrl}/logout`, {}).pipe(
+      tap({
+        next: () => this.clearSession(),
+        error: () => this.clearSession()
+      })
+    );
   }
 
-  get isLoggedIn(): boolean {
-    return !!this.currentUserSubject.value;
+  private clearSession(): void {
+    this.currentUserSubject.next(null);
+    sessionStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
   }
 
   get currentUser(): AuthUser | null {

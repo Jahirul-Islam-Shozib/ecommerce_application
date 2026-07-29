@@ -17,6 +17,10 @@ export const mainRoutes: Routes = [
       {
         path: 'my-orders',
         loadComponent: () => import('../../workspace/orders/my-orders/my-orders.component').then(m => m.MyOrdersComponent),
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('../../workspace/profile/profile.component').then(m => m.ProfileComponent),
       }
     ]
   }

@@ -18,8 +18,8 @@
   </div>
 
   <div *ngIf="isMobile" class="col-span-12 sticky top-16 z-10 block md:hidden">
-    <div class="block md:hidden">
-      <app-autocomplete-search>
+    <div class="block md:hidden w-full mb-3">
+      <app-autocomplete-search class="w-full">
       </app-autocomplete-search>
     </div>
   </div>
@@ -81,11 +81,12 @@
     </div>
 
     <div>
-      @if (products?.length === 0) {
-        <div class="col-12">
-          <div class="product-empty">
-            No product found
-          </div>
+      @if (!loading && (products?.length === 0 || hasError)) {
+        <div class="flex flex-col items-center justify-center py-16 text-center">
+          <img src="assets/images/cart-logo.png" alt="No products" class="w-36 h-36 opacity-30 mb-3"/>
+          <p class="text-gray-500 font-semibold text-base">
+            {{ hasError ? 'Something went wrong. Please try again.' : 'No products found.' }}
+          </p>
         </div>
       }
     </div>
@@ -120,7 +121,9 @@
              class="flex flex-col gap-4 py-3 bg-white border-b border-[#bde5e5]">
           <div class="flex justify-between">
             <div class="flex items-center space-x-4">
-              <img [src]="item.product.image" alt="Product" class="w-16 h-16 object-cover rounded">
+              <img
+                [src]="item.product.image.startsWith('http') || item.product.image.startsWith('data:') ? item.product.image : 'data:image/png;base64,' + item.product.image"
+                alt="Product" class="w-16 h-16 object-cover rounded">
               <div class="flex flex-col">
                 <h3 class="text-sm font-medium text-gray-800">{{ item.product.name }}</h3>
                 <div class="flex gap-3 items-center">
@@ -196,7 +199,7 @@
     </p-drawer>
   </div>
 
-  <div *ngIf="!checkoutDrawerVisible" class="cart-container">
+  <div *ngIf="!checkoutDrawerVisible" class="cart-container hidden md:block">
     <div class="cart-box" (click)="openCheckoutDrawer()">
       <div class="box-1">
         <img src="assets/images/shopping-cart-01.png" alt="cart-icon">

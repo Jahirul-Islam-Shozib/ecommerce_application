@@ -5,13 +5,29 @@
   </div>
 
   <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-    <app-product-card
-      *ngFor="let product of popularProducts"
-      [product]="product"
-      [qty]="getQty(product)"
-      (add)="addToCart($event)"
-      (increment)="increment($event)"
-      (decrement)="decrement($event)"
-    ></app-product-card>
+
+    <ng-container *ngIf="loading">
+      <p-skeleton *ngFor="let i of [1,2,3,4,5,6,7,8]" height="250px" borderRadius="12px"></p-skeleton>
+    </ng-container>
+
+    <ng-container *ngIf="!loading">
+      <ng-container *ngIf="popularProducts?.length > 0; else noProducts">
+        <app-product-card
+          *ngFor="let product of popularProducts"
+          [product]="product"
+          [qty]="getQty(product)"
+          (add)="addToCart($event)"
+          (increment)="increment($event)"
+          (decrement)="decrement($event)"
+        ></app-product-card>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #noProducts>
+      <div class="col-span-2 lg:col-span-4 py-6 px-4 text-center rounded-lg bg-gray-50 border border-dashed border-gray-200">
+        <p class="text-gray-500 text-sm">No popular products available at the moment. Check back soon.</p>
+      </div>
+    </ng-template>
+
   </div>
 </section>

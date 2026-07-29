@@ -41,6 +41,7 @@ import {Chip} from "primeng/chip";
 export class AllProductsComponent implements OnInit {
   products: any;
   loading: boolean = true;
+  hasError: boolean = false;
   first: number = 0;
   pageNumber: number = 1;
   pageSize: number = 28;
@@ -197,10 +198,13 @@ export class AllProductsComponent implements OnInit {
       next: (response) => {
         this.products = response.data;
         this.totalRecords = response.total;
+        this.hasError = false;
         this.loading = false;
       },
       error: (err) => {
         console.error(err);
+        this.products = [];
+        this.hasError = true;
         this.loading = false;
       }
     });

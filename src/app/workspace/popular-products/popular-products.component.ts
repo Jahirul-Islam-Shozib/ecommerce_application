@@ -1,23 +1,25 @@
 import {Component, OnInit} from '@angular/core';
 import {Product, ProductService} from "../../service/product.service";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {ProductCardComponent} from "../../shared/product-card/product-card.component";
+import {Skeleton} from "primeng/skeleton";
 
 @Component({
   selector: 'app-popular-products',
   standalone: true,
   imports: [
-    NgForOf,
-    NgIf,
+    CommonModule,
     RouterLink,
-    ProductCardComponent
+    ProductCardComponent,
+    Skeleton
   ],
   templateUrl: './popular-products.component.html',
   styleUrl: './popular-products.component.scss'
 })
 export class PopularProductsComponent implements OnInit {
   popularProducts: any;
+  loading = true;
 
   constructor(public productService: ProductService) {
   }
@@ -29,14 +31,12 @@ export class PopularProductsComponent implements OnInit {
   fetchProducts(): void {
     this.productService.getAllProducts(1, 8).subscribe({
       next: (response) => {
-        this.popularProducts = response.data
-        console.log(this.popularProducts)
-        // this.totalRecords = response.total;
-        // this.loading = false;
+        this.popularProducts = response.data;
+        this.loading = false;
       },
       error: (err) => {
         console.error(err);
-        // this.loading = false;
+        this.loading = false;
       }
     });
   }

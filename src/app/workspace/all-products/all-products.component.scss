@@ -32,6 +32,12 @@
     top: 0;
     left: -4%;
   }
+
+  @media (max-width: 1024px) {
+    &::before {
+      display: none;
+    }
+  }
 }
 
 .product-empty {
@@ -196,5 +202,22 @@
   .checkout-items {
     height: 77%;
     overflow-y: auto;
+    padding-right: 8px;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: #D7EBEB transparent;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #D7EBEB;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
   }
 }

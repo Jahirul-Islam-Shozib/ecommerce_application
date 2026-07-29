@@ -1,6 +1,10 @@
 :host::ng-deep {
   .p-inputtext {
     width: 500px;
+
+    @media (max-width: 1024px) {
+      width: 100%;
+    }
   }
 
   .p-autocomplete {
@@ -36,6 +40,10 @@
 
 .autocomplete-wrapper {
   position: relative;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 }
 
 .clear-icon {

@@ -22,6 +22,8 @@ import {MessageService} from "primeng/api";
 import {Toast} from "primeng/toast";
 import {Router} from "@angular/router";
 import {OrdersService} from "../../service/order.service";
+import {NotificationMailService} from "../../service/notification-mail.service";
+import {switchMap} from "rxjs";
 
 @Component({
   selector: 'app-dialog-cart',
@@ -57,9 +59,19 @@ export class DialogCartComponent implements OnInit {
     {label: 'Next Working Day', value: 'nextWorkingDay', disabled: false},
   ];
 
+  paymentMethods = [
+    {label: 'Cash On Delivery', value: 'cod'},
+    {label: 'bKash', value: 'bkash'},
+    {label: 'Card', value: 'card'}
+  ];
+
+  selectedPaymentMethods: string = 'cod';
   employeeInfo: any;
   isLoggedIn = false;
   loading: boolean = false;
+
+  private readonly fromEmail: string = 'shozib@squarehealth.com.bd';
+  private readonly toEmail: string = 'shozib@squarehealth.com.bd';
 
   cartItems!: Signal<CartItem[]>;
   activeTab: string = '0';
@@ -92,7 +104,8 @@ export class DialogCartComponent implements OnInit {
               private authService: AuthService,
               private messageService: MessageService,
               private router: Router,
-              private orderService: OrdersService
+              private orderService: OrdersService,
+              private notificationMailService: NotificationMailService,
   ) {
   }
 
@@ -116,7 +129,6 @@ export class DialogCartComponent implements OnInit {
     const now = new Date();
     const currentHour = now.getHours();
 
-    // If it's 10 AM or later
     if (currentHour >= 10) {
       this.deliveryOptions = [
         {label: 'Today', value: 'today', disabled: true},
@@ -169,22 +181,18 @@ export class DialogCartComponent implements OnInit {
   }
 
   increase(item: any) {
-    // item.quantity++;
     this.productService.addToCart(item.product);
   }
 
   decrease(item: any) {
-    // if (item.quantity > 1) item.quantity--;
     this.productService.decreaseFromCart(item.product);
   }
 
   remove(item: any) {
-    // this.cartItems = this.cartItems.filter(i => i !== item);
     this.productService.removeFromCart(item.product);
   }
 
   clearCart() {
-    // this.cartItems = [];
     this.productService.clearCart();
   }
 
@@ -243,7 +251,7 @@ export class DialogCartComponent implements OnInit {
       deliveryOption: {
         pickupPoint: this.selectedPickupPoint,
         deliveryDay: this.getDeliveryDate(),
-        paymentMethod: 'Cash',
+        paymentMethod: this.selectedPaymentMethods,
         deliveryNote: this.deliveryNote || ''
       },
       orderSummary: {
@@ -267,28 +275,35 @@ export class DialogCartComponent implements OnInit {
       createdAt: new Date().toISOString()
     };
 
-    console.log(orderPayload)
     this.loading = true;
 
-    this.orderService.createOrder(orderPayload).subscribe({
-      next: (res) => {
+    this.orderService.createOrder(orderPayload).pipe(
+      switchMap(() => {
+        const html = this.buildCopyHtml();
+        const text = this.buildCopyPlain();
+        return this.notificationMailService.sendEmail({
+          from: this.fromEmail,
+          to: this.toEmail,
+          subject: `Personal Product requisition`,
+          text: text,
+          html: html,
+          process_now: true
+        });
+      })
+    ).subscribe({
+      next: () => {
         this.loading = false;
         this.visibleDialog = true;
         this.visible = false;
 
-        // ✅ success UX
-        // this.messageService.add({
-        //   severity: 'success',
-        //   summary: 'Order Placed',
-        //   detail: `Order ${orderId} created successfully`,
-        // });
-
-        // OPTIONAL: clear cart
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Order placed successfully.',
+        });
         this.clearCart();
       },
       error: (err) => {
         this.loading = false;
-
         this.messageService.add({
           severity: 'error',
           summary: 'Order Failed',
@@ -307,16 +322,10 @@ export class DialogCartComponent implements OnInit {
       .map(
         (row, idx) => `
       <tr>
-        <td style="border:1px solid #6b7280;padding:8px;text-align:center;width:56px;">${idx + 1}</td>
-        <td style="border:1px solid #6b7280;padding:8px;">
-          ${row.product.name}
-        </td>
-        <td style="border:1px solid #6b7280;padding:8px;text-align:center;width:120px;">
-          ${row.product.weightValue}${row.product.weightUnit}
-        </td>
-        <td style="border:1px solid #6b7280;padding:8px;text-align:center;width:88px;">
-          ${row.quantity}
-        </td>
+        <td style="border:1px solid #6b7280;padding:8px;text-align:center;white-space:nowrap;">${idx + 1}</td>
+        <td style="border:1px solid #6b7280;padding:8px;">${row.product.name}</td>
+        <td style="border:1px solid #6b7280;padding:8px;text-align:center;white-space:nowrap;">${row.product.weightValue}${row.product.weightUnit}</td>
+        <td style="border:1px solid #6b7280;padding:8px;text-align:center;white-space:nowrap;">${row.quantity}</td>
       </tr>`
       )
       .join('');
@@ -334,13 +343,13 @@ export class DialogCartComponent implements OnInit {
   </div>
 
   <!-- Product table -->
-  <table style="border-collapse:collapse;width:50%;border:1px solid #6b7280;table-layout:fixed;">
+  <table style="border-collapse:collapse;width:auto;border:1px solid #6b7280;">
     <thead>
       <tr style="background:#f3f4f6;">
-        <th style="border:1px solid #6b7280;padding:8px;text-align:center;width:56px;"><b>Sl</b></th>
+        <th style="border:1px solid #6b7280;padding:8px;text-align:center;white-space:nowrap;"><b>Sl</b></th>
         <th style="border:1px solid #6b7280;padding:8px;text-align:left;"><b>Product Name</b></th>
-        <th style="border:1px solid #6b7280;padding:8px;text-align:center;width:120px;"><b>Product Amount</b></th>
-        <th style="border:1px solid #6b7280;padding:8px;text-align:center;width:88px;"><b>Quantity</b></th>
+        <th style="border:1px solid #6b7280;padding:8px;text-align:center;white-space:nowrap;"><b>Product Amount</b></th>
+        <th style="border:1px solid #6b7280;padding:8px;text-align:center;white-space:nowrap;"><b>Quantity</b></th>
       </tr>
     </thead>
       <tbody>
@@ -420,7 +429,7 @@ export class DialogCartComponent implements OnInit {
   }
 
   onCancel() {
-    this.visibleDialog = false;
+    this.visibleDialog1 = false;
   }
 
 }

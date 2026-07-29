@@ -37,10 +37,15 @@ export class OrdersService {
       .set('page', page.toString())
       .set('size', size.toString());
 
-    return this.http.post<{ data: OrderPayload[]; total: number }>(
+    return this.http.post<any>(
       `${this.baseUrl}/orders/list`,
       body ?? {status: 'All'},
       {params},
+    ).pipe(
+      map(res => ({
+        data: res.data ?? [],
+        total: res.meta?.total ?? 0
+      }))
     );
   }
 

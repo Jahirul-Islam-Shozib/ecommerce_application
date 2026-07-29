@@ -133,11 +133,23 @@
 
     <!-- Empty -->
     <div
-      *ngIf="!orders"
-      class="py-8 text-center text-slate-500 border border-dashed rounded-lg"
+      *ngIf="!loading && orders.length === 0"
+      class="py-12 text-center text-slate-500 border border-dashed rounded-lg"
     >
-      No orders available
+      <i class="pi pi-inbox text-4xl text-gray-300 mb-3 block"></i>
+      <p class="font-semibold">No orders found</p>
+      <p class="text-sm mt-1">You haven't placed any orders yet.</p>
     </div>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!loading && totalRecords > size" class="mt-4 pagination">
+    <p-paginator
+      [first]="first"
+      [rows]="size"
+      [totalRecords]="totalRecords"
+      (onPageChange)="onPageChange($event)"
+    />
   </div>
 </div>
 
@@ -160,7 +172,8 @@
         <!-- Left: image + info -->
         <div class="flex items-center gap-4 min-w-0">
           <!-- image box like screenshot -->
-          <div class="w-[76px] h-[76px] rounded-md border border-slate-200 bg-white flex items-center justify-center overflow-hidden">
+          <div
+            class="w-[76px] h-[76px] rounded-md border border-slate-200 bg-white flex items-center justify-center overflow-hidden">
             <img
               [src]="item.image || 'assets/images/product-placeholder.png'"
               class="w-[56px] h-[56px] object-contain"
@@ -184,7 +197,8 @@
 
         <!-- Right: quantity + unit price -->
         <div class="text-right">
-          <div class="text-[14px] text-slate-500">Quantity: <span class="text-[14px] font-semibold text-slate-900">{{ item.quantity }} items</span></div>
+          <div class="text-[14px] text-slate-500">Quantity: <span
+            class="text-[14px] font-semibold text-slate-900">{{ item.quantity }} items</span></div>
         </div>
       </div>
     </div>

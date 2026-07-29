@@ -41,12 +41,12 @@ export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
 
   companies: Company[] = [
-    {label: 'Square Toiletries Limited', value: 'Square Toiletries Limited'},
-    {label: 'Square Food & Beverage Ltd', value: 'Square Food & Beverage Ltd'},
+    // {label: 'Square Toiletries Limited', value: 'Square Toiletries Limited'},
+    // {label: 'Square Food & Beverage Ltd', value: 'Square Food & Beverage Ltd'},
     {label: 'Square Health Limited', value: 'Square Health Limited'},
     {label: 'Square Pharmaceuticals Limited', value: 'Square Pharmaceuticals Limited'},
-    {label: 'Square Textile Limited', value: 'Square Textile Limited'},
-    {label: 'Square Informatix Limited', value: 'Square Informatix Limited'}
+    // {label: 'Square Textile Limited', value: 'Square Textile Limited'},
+    // {label: 'Square Informatix Limited', value: 'Square Informatix Limited'}
   ];
 
   constructor(
@@ -91,7 +91,7 @@ export class SignUpComponent implements OnInit {
         });
 
         this.signUpForm.reset();
-        this.router.navigate(['/auth/login']);
+        setTimeout(() => this.router.navigate(['/auth/login']), 2000);
       },
       error: (err) => {
         this.messageService.add({
@@ -104,4 +104,3 @@ export class SignUpComponent implements OnInit {
     });
   }
 }
-

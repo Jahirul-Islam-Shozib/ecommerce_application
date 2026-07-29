@@ -36,43 +36,24 @@
             ></i>
           </ng-template>
         </div>
-        <!-- If logged in: show name + select -->
-        <div *ngIf="currentUser && isLoggedIn; else loginBlock" class="flex items-center space-x-2">
-          <!--          <i class="pi pi-user text-lg"></i>-->
-          <!--          <span class="text-sm font-semibold truncate max-w-[120px]">-->
-          <!--      {{ currentUser.name }}-->
-          <!--    </span>-->
-
-          <!-- Simple select for logout -->
-          <p-select
-            [options]="userMenuOptions"
-            optionLabel="label"
-            optionValue="value"
-            class="w-full text-xs"
-            (onChange)="onUserOptionChange($event.value)"
-          >
-
-            <!-- Selected Value Template (placeholder-style) -->
-            <ng-template pTemplate="selectedItem">
-              <div class="flex items-center space-x-2 justify-center">
-                <i class="pi pi-user text-base"></i>
-                <span class="font-semibold truncate hidden sm:inline">
-          {{ currentUser.name }}
-        </span>
-              </div>
-            </ng-template>
-
-            <!-- Dropdown Items -->
-            <ng-template let-option pTemplate="item">
-              <div class="flex items-center space-x-2">
-                <i class="pi pi-user" *ngIf="option.value === 'profile'"></i>
-                <i class="pi pi-shopping-bag" *ngIf="option.value === 'orders'"></i>
-                <i class="pi pi-sign-out" *ngIf="option.value === 'logout'"></i>
-                <span>{{ option.label }}</span>
-              </div>
-            </ng-template>
-
-          </p-select>
+        <!-- If logged in: show name + dropdown -->
+        <div *ngIf="currentUser && isLoggedIn; else loginBlock" class="user-menu">
+          <div class="user-trigger" (click)="menuOpen = !menuOpen">
+            <i class="pi pi-user text-base"></i>
+            <span class="font-semibold truncate hidden sm:inline">{{ currentUser.name }}</span>
+            <i class="pi pi-chevron-down text-xs"></i>
+          </div>
+          <div class="user-dropdown" *ngIf="menuOpen">
+            <div class="user-dropdown-item" (click)="onMenuClick('profile')">
+              <i class="pi pi-user"></i> Profile
+            </div>
+            <div class="user-dropdown-item" (click)="onMenuClick('orders')">
+              <i class="pi pi-shopping-bag"></i> Orders
+            </div>
+            <div class="user-dropdown-item" (click)="onMenuClick('logout')">
+              <i class="pi pi-sign-out"></i> Logout
+            </div>
+          </div>
         </div>
 
         <!-- If NOT logged in: show login icon -->

@@ -1,24 +1,29 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
+import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import {CommonModule} from "@angular/common";
 import {Product} from "../../service/product.service";
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
   imports: [
-    NgForOf,
-    NgIf
+    CommonModule
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss'
 })
-export class ProductCardComponent {
+export class ProductCardComponent implements OnChanges {
   @Input() product!: Product;
-  @Input() qty: number = 0; // current qty in cart
+  @Input() qty: number = 0;
 
   @Output() add = new EventEmitter<Product>();
   @Output() increment = new EventEmitter<Product>();
   @Output() decrement = new EventEmitter<Product>();
+
+  imageError = false;
+
+  ngOnChanges() {
+    this.imageError = false;
+  }
 
   onAdd() {
     this.add.emit(this.product);

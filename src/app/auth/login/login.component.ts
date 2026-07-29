@@ -8,8 +8,8 @@ import {InputText} from "primeng/inputtext";
 import {Password} from "primeng/password";
 import {MessageService} from "primeng/api";
 import {Toast} from "primeng/toast";
-import {AuthService, AuthUser} from "../../service/auth.service";
-import {User} from "../../models/User";
+import {AuthService, LoginResponse} from "../../service/auth.service";
+import {Button} from "primeng/button";
 
 @Component({
   selector: 'app-login',
@@ -23,7 +23,8 @@ import {User} from "../../models/User";
     InputGroupAddon,
     InputText,
     Password,
-    Toast
+    Toast,
+    Button
   ],
   providers: [MessageService],
   styleUrls: ['./login.component.scss']
@@ -31,6 +32,7 @@ import {User} from "../../models/User";
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   redirectUrl: string | null = null;
+  loading = false;
 
   constructor(private fb: FormBuilder,
               private router: Router,
@@ -56,24 +58,23 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const { identifier, password } = this.loginForm.value;
+    const {identifier, password} = this.loginForm.value;
+    this.loading = true;
 
     this.authService.login(identifier, password).subscribe({
-      next: (user: AuthUser) => {
-        // OPTIONAL: if you want to store logged-in user:
-        // localStorage.setItem('currentUser', JSON.stringify(user));
-
+      next: (res: LoginResponse) => {
         this.messageService.add({
           severity: 'success',
           summary: 'Login Successful',
-          detail: `Welcome, ${user.name}`,
+          detail: `Welcome, ${res.data.user.name}`,
           life: 2000
         });
 
         const target = this.redirectUrl || '/';
-        this.router.navigateByUrl(target);
+        setTimeout(() => this.router.navigateByUrl(target), 1500);
       },
       error: (err) => {
+        this.loading = false;
         console.error('Login error', err);
 
         const detail =

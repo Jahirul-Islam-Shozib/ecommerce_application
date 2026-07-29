@@ -37,7 +37,6 @@ interface SignUpUser {
     DialogModule,
     DialogCartComponent,
     AutocompleteSearchComponent,
-    Select
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
@@ -45,6 +44,7 @@ interface SignUpUser {
 
 export class NavbarComponent implements OnInit, OnDestroy {
   cartDialogVisible: boolean = false;
+  menuOpen: boolean = false;
   private subs = new Subscription();
 
   products: any[] = [];
@@ -62,7 +62,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.isMobile = window.innerWidth < 768;
   }
 
-  // ✅ add scroll listener
   @HostListener('window:scroll', [])
   onScroll() {
     this.isScrolled = window.scrollY > 10;
@@ -102,21 +101,28 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return !!this.currentUser;
   }
 
-  onUserOptionChange(action: string | null) {
-    if (!action) return;
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.user-menu')) {
+      this.menuOpen = false;
+    }
+  }
 
+  onMenuClick(action: string) {
+    this.menuOpen = false;
     switch (action) {
       case 'profile':
-        this.router.navigate(['/profile']); // adjust route if needed
+        this.router.navigate(['/profile']);
         break;
-
       case 'orders':
-        this.router.navigate(['/my-orders']); // adjust route if needed
+        this.router.navigate(['/my-orders']);
         break;
-
       case 'logout':
-        this.authService.logout();
-        this.router.navigate(['/auth/login']);
+        this.authService.logout().subscribe({
+          next: () => this.router.navigate(['/auth/login']),
+          error: () => this.router.navigate(['/auth/login'])
+        });
         break;
     }
   }

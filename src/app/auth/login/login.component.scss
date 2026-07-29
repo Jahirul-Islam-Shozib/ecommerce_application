@@ -62,6 +62,18 @@
     }
   }
 
+  ::ng-deep .p-button {
+    width: 100%;
+    background: #2dc6c6;
+    border-color: #2dc6c6;
+    justify-content: center;
+
+    &:hover {
+      background: #26b0b0 !important;
+      border-color: #26b0b0 !important;
+    }
+  }
+
   .signup-text {
     text-align: center;
     margin-top: 1rem;

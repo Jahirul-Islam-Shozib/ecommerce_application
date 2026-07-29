@@ -1,45 +1,75 @@
-.p-tab-active {
-  border-color: #0D9488 !important;
-  color: #0D9488;
-}
-
-::ng-deep {
-  .p-dialog-content {
-    padding: 0.5rem !important;
-  }
-}
-
-.confirmation-dialog {
-  ::ng-deep.p-dialog-header {
-    padding: 0.5rem !important;
+.checkout-dialog-component {
+  .p-tab-active {
+    border-color: #0D9488 !important;
+    color: #0D9488;
   }
 
-  /*  ::ng-deep.copy-btn{
-      color: #0D9488 !important;
-    }*/
-}
+  ::ng-deep {
+    .p-dialog {
+      padding: 0.5rem;
+    }
 
-.delivery-option {
-  flex: 1;
-  padding: 0.5rem 1rem;
-  border: 1px solid #d0e5df;
-  border-radius: 8px;
-  color: #374151;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+    .p-dialog-content {
+      padding: 0.5rem !important;
+      overflow-y: auto !important;
+    }
 
-  &:hover {
-    border-color: #27BCB8;
+    .p-select-overlay {
+      z-index: 99999 !important;
+    }
   }
 
-  &.selected {
-    border-color: #27BCB8;
-    background-color: #f4fcf9;
-    color: #002D2C;
+  @media (min-width: 768px) {
+    .cart-grid {
+      height: calc(68vh - 120px);
+      align-items: start;
+    }
+
+    .cart-items-col {
+      height: 100%;
+      overflow-y: auto;
+      padding-right: 8px;
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+      scrollbar-color: #D7EBEB transparent;
+
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: #D7EBEB;
+        border-radius: 4px;
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+    }
+  }
+
+  .confirmation-dialog {
+    ::ng-deep.p-dialog-header {
+      padding: 0.5rem !important;
+    }
+  }
+
+  .delivery-option {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d0e5df;
+    border-radius: 8px;
+    color: #374151;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      border-color: #27BCB8;
+    }
+
+    &.selected {
+      border-color: #27BCB8;
+      background-color: #f4fcf9;
+      color: #002D2C;
+    }
   }
 }
-
-//::ng-deep.p-dialog-header {
-//  padding: 0 !important;
-//}
