@@ -60,6 +60,7 @@ export class AllProductsComponent implements OnInit {
 
   employeeInfo: any;
   isLoggedIn = false;
+  readonly failedProductImages = new Set<string>();
 
   categories: CategoryItem[] = [
     {key: 'BEVERAGES', label: 'Beverages', icon: 'pi-cup'},
@@ -221,6 +222,10 @@ export class AllProductsComponent implements OnInit {
     return item?.quantity ?? 0;
   }
 
+  onProductImageError(productId: string): void {
+    this.failedProductImages.add(productId);
+  }
+
   onAddClick(product: Product) {
     this.productService.addToCart(product);
 
@@ -328,6 +333,4 @@ export class AllProductsComponent implements OnInit {
       queryParamsHandling: 'merge'
     });
   }
-
 }
-

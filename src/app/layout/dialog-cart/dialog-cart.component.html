@@ -33,14 +33,18 @@
                 <!-- Item Info -->
                 <div class="md:col-span-7 flex justify-between items-start space-x-4">
                   <div class="flex gap-4">
-                    <!--                  <img [src]="'data:image/png;base64,' + item.product.image" alt="{{item.product.name}}"-->
-                    <!--                       class="w-24 h-24 bg-[#F9FEFE] rounded-md border p-2 border-gray-200"/>-->
-
-                    <img
-                      [src]="item.product.image.startsWith('http') || item.product.image.startsWith('data:') ? item.product.image : 'data:image/png;base64,' + item.product.image"
-                      [alt]="item.product.name"
-                      class="w-24 h-24 bg-[#F9FEFE] rounded-md border p-2 border-gray-200"
-                    />
+                    <div class="cart-product-image">
+                      <img
+                        *ngIf="item.product.image && !failedProductImages.has(item.product._id); else imagePlaceholder"
+                        [src]="item.product.image.startsWith('http') || item.product.image.startsWith('data:') ? item.product.image : 'data:image/png;base64,' + item.product.image"
+                        [alt]="item.product.name"
+                        (error)="onProductImageError(item.product._id)"
+                      />
+                      <ng-template #imagePlaceholder>
+                        <i class="pi pi-image" aria-hidden="true"></i>
+                        <span>No image</span>
+                      </ng-template>
+                    </div>
                     <div>
                       <p class="font-medium text-gray-800 leading-snug">
                         {{ item.product.name }}

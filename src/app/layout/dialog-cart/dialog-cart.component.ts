@@ -69,6 +69,7 @@ export class DialogCartComponent implements OnInit {
   employeeInfo: any;
   isLoggedIn = false;
   loading: boolean = false;
+  readonly failedProductImages = new Set<string>();
 
   private readonly fromEmail: string = 'shozib@squarehealth.com.bd';
   private readonly toEmail: string = 'shozib@squarehealth.com.bd';
@@ -113,6 +114,10 @@ export class DialogCartComponent implements OnInit {
     this.cartItems = this.productService.getCart;
     this.checkDeliveryAvailability();
     this.getUserInfo();
+  }
+
+  onProductImageError(productId: string): void {
+    this.failedProductImages.add(productId);
   }
 
   getUserInfo() {

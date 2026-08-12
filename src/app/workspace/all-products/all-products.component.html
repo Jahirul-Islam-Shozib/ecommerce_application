@@ -121,9 +121,20 @@
              class="flex flex-col gap-4 py-3 bg-white border-b border-[#bde5e5]">
           <div class="flex justify-between">
             <div class="flex items-center space-x-4">
-              <img
-                [src]="item.product.image.startsWith('http') || item.product.image.startsWith('data:') ? item.product.image : 'data:image/png;base64,' + item.product.image"
-                alt="Product" class="w-16 h-16 object-cover rounded">
+              <div class="cart-item-image">
+                <img
+                  *ngIf="item.product.image && !failedProductImages.has(item.product._id); else cartItemImagePlaceholder"
+                  [src]="item.product.image.startsWith('http') || item.product.image.startsWith('data:') ? item.product.image : 'data:image/png;base64,' + item.product.image"
+                  [alt]="item.product.name"
+                  (error)="onProductImageError(item.product._id)"
+                />
+                <ng-template #cartItemImagePlaceholder>
+                  <div class="img-placeholder">
+                    <i class="pi pi-image" aria-hidden="true"></i>
+                    <span>No image</span>
+                  </div>
+                </ng-template>
+              </div>
               <div class="flex flex-col">
                 <h3 class="text-sm font-medium text-gray-800">{{ item.product.name }}</h3>
                 <div class="flex gap-3 items-center">
@@ -191,11 +202,22 @@
   <p-toast></p-toast>
 
   <div *ngIf="isMobile">
-    <p-drawer [(visible)]="drawerVisible" header="All Brands" position="right">
-      <app-all-brands
-        [selectedBrandNames]="selectedBrands"
-        (brandsChange)="onBrandsChange($event)">
-      </app-all-brands>
+    <p-drawer [(visible)]="drawerVisible" header="Product Filters" position="right">
+      <div class="mobile-filter-drawer">
+        <section>
+          <app-all-category
+            [selectedCategories]="selectedCategories"
+            (categoriesChange)="onCategoriesChange($event)"
+          ></app-all-category>
+        </section>
+
+        <section>
+          <app-all-brands
+            [selectedBrandNames]="selectedBrands"
+            (brandsChange)="onBrandsChange($event)">
+          </app-all-brands>
+        </section>
+      </div>
     </p-drawer>
   </div>
 
