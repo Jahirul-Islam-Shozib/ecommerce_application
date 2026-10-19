@@ -29,9 +29,50 @@
   <div class="col-span-12 flex flex-col gap-4 md:mt-4 sm:mt-2 right-content"
        [ngClass]="checkoutDrawerVisible ? 'md:col-span-6' : 'md:col-span-8'">
 
-    <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold">All Products</h1>
-      <span *ngIf="isMobile" class="pi pi-sliders-h" style="font-size: 1.2rem" (click)="drawerVisible = true"></span>
+    <div class="products-toolbar">
+      <div class="products-heading">
+        <h1 class="text-2xl font-bold">All Products</h1>
+        <p *ngIf="searchTerm && !loading" class="mt-1 text-sm text-gray-500">
+          {{ totalRecords }} {{ totalRecords === 1 ? 'product' : 'products' }} found for “{{ searchTerm }}”
+        </p>
+      </div>
+
+      <div class="products-toolbar-actions">
+        <form class="catalog-search" role="search" (ngSubmit)="submitCatalogSearch()">
+          <input
+            type="search"
+            name="catalogSearch"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onCatalogSearchChange($event)"
+            placeholder="Search all products..."
+            autocomplete="off"
+            aria-label="Search all products"
+          />
+          <button
+            *ngIf="searchTerm; else catalogSearchButton"
+            type="button"
+            aria-label="Clear product search"
+            (click)="clearSearch()"
+          >
+            <i class="pi pi-times" aria-hidden="true"></i>
+          </button>
+          <ng-template #catalogSearchButton>
+            <button type="submit" aria-label="Search all products">
+              <i class="pi pi-search" aria-hidden="true"></i>
+            </button>
+          </ng-template>
+        </form>
+
+        <button
+          *ngIf="isMobile"
+          type="button"
+          class="filter-button"
+          aria-label="Open product filters"
+          (click)="drawerVisible = true"
+        >
+          <i class="pi pi-sliders-h" aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
 
     <div class="flex justify-between gap-2 items-start">
@@ -49,6 +90,14 @@
           [removable]="true"
           (onRemove)="removeBrandFilter(b)"
         ></p-chip>
+
+        <p-chip
+          *ngIf="searchTerm"
+          [label]="'Search: ' + searchTerm"
+          [removable]="true"
+          (onRemove)="clearSearch()"
+        ></p-chip>
+
       </div>
 
       <p-chip
@@ -85,8 +134,16 @@
         <div class="flex flex-col items-center justify-center py-16 text-center">
           <img src="assets/images/cart-logo.png" alt="No products" class="w-36 h-36 opacity-30 mb-3"/>
           <p class="text-gray-500 font-semibold text-base">
-            {{ hasError ? 'Something went wrong. Please try again.' : 'No products found.' }}
+            {{ hasError ? 'Something went wrong. Please try again.' : (searchTerm ? 'No products found for “' + searchTerm + '”.' : 'No products found.') }}
           </p>
+          <button
+            *ngIf="!hasError && searchTerm"
+            type="button"
+            class="mt-4 text-sm font-semibold text-[#178f8b] hover:underline"
+            (click)="clearSearch()"
+          >
+            Clear search
+          </button>
         </div>
       }
     </div>

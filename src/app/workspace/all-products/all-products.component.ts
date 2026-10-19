@@ -1,4 +1,5 @@
-import {Component, HostListener, OnInit, Signal} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, Signal} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import {CartItem, Product, ProductService} from "../../service/product.service";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {AllBrandsComponent} from "../all-brands/all-brands.component";
@@ -15,6 +16,7 @@ import {AllCategoryComponent, CategoryItem, ProductCategoryKey} from "../all-cat
 import {AuthService} from "../../service/auth.service";
 import {CartStateService} from "../../service/cart-state.service";
 import {Chip} from "primeng/chip";
+import {Subject, Subscription, debounceTime, distinctUntilChanged} from 'rxjs';
 
 @Component({
   selector: 'app-all-products',
@@ -34,11 +36,12 @@ import {Chip} from "primeng/chip";
     NgClass,
     AllCategoryComponent,
     Chip,
+    FormsModule,
   ],
   providers: [MessageService],
   styleUrls: ['./all-products.component.scss']
 })
-export class AllProductsComponent implements OnInit {
+export class AllProductsComponent implements OnInit, OnDestroy {
   products: any;
   loading: boolean = true;
   hasError: boolean = false;
@@ -46,6 +49,7 @@ export class AllProductsComponent implements OnInit {
   pageNumber: number = 1;
   pageSize: number = 28;
   totalRecords: number = 0;
+  searchTerm = '';
   selectedBrands: string[] = [];
   selectedCategories: ProductCategoryKey[] = [];
   cartItems!: Signal<CartItem[]>;
@@ -61,6 +65,9 @@ export class AllProductsComponent implements OnInit {
   employeeInfo: any;
   isLoggedIn = false;
   readonly failedProductImages = new Set<string>();
+  private readonly searchChanges = new Subject<string>();
+  private readonly searchSubscription = new Subscription();
+  private productRequest?: Subscription;
 
   categories: CategoryItem[] = [
     {key: 'BEVERAGES', label: 'Beverages', icon: 'pi-cup'},
@@ -97,10 +104,18 @@ export class AllProductsComponent implements OnInit {
     this.scrollToTop();
     this.getUserInfo();
 
+    this.searchSubscription.add(
+      this.searchChanges.pipe(
+        debounceTime(900),
+        distinctUntilChanged(),
+      ).subscribe(term => this.updateSearchQuery(term))
+    );
+
     this.route.queryParams.subscribe(params => {
       const productId = params['productId'];
       const brandParam = params['brand'];
       const categoryParam = params['category'];
+      this.searchTerm = (params['q'] ?? '').trim();
 
       this.selectedBrands = brandParam
         ? (Array.isArray(brandParam) ? brandParam : [brandParam])
@@ -112,12 +127,38 @@ export class AllProductsComponent implements OnInit {
 
       this.pageNumber = 1;
       this.first = 0;
+      this.loading = true;
 
       if (productId) {
         this.loadSingleProduct(productId);
       } else {
         this.fetchProducts();
       }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubscription.unsubscribe();
+    this.productRequest?.unsubscribe();
+  }
+
+  onCatalogSearchChange(term: string): void {
+    this.searchChanges.next(term.trim());
+  }
+
+  submitCatalogSearch(): void {
+    this.updateSearchQuery(this.searchTerm.trim());
+  }
+
+  private updateSearchQuery(term: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        q: term || null,
+        productId: null,
+      },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
     });
   }
 
@@ -133,10 +174,10 @@ export class AllProductsComponent implements OnInit {
 
   loadSingleProduct(id: string) {
     this.loading = true;
-    this.productService.getProductListById(id).subscribe({
+    this.productRequest?.unsubscribe();
+    this.productRequest = this.productService.getProductListById(id).subscribe({
       next: (res) => {
         this.products = [res];
-        console.log(this.products)
         this.totalRecords = res.total;
         this.loading = false;
       },
@@ -195,7 +236,14 @@ export class AllProductsComponent implements OnInit {
     const brands = this.selectedBrands.length ? this.selectedBrands : undefined;
     const categories = this.selectedCategories.length ? this.selectedCategories : undefined;
 
-    this.productService.getAllProducts(this.pageNumber, this.pageSize, brands, categories).subscribe({
+    this.productRequest?.unsubscribe();
+    this.productRequest = this.productService.getAllProducts(
+      this.pageNumber,
+      this.pageSize,
+      brands,
+      categories,
+      this.searchTerm || undefined,
+    ).subscribe({
       next: (response) => {
         this.products = response.data;
         this.totalRecords = response.total;
@@ -205,6 +253,7 @@ export class AllProductsComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.products = [];
+        this.totalRecords = 0;
         this.hasError = true;
         this.loading = false;
       }
@@ -332,5 +381,11 @@ export class AllProductsComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     });
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.searchChanges.next('');
+    this.updateSearchQuery('');
   }
 }

@@ -183,7 +183,13 @@ export class ProductService {
     this.syncCartToStorage([]); // 🔥 also clear from localStorage
   }
 
-  getAllProducts(page?: number, size?: number, brands?: string[], category?: string[]): Observable<{ data: Product[], total: number }> {
+  getAllProducts(
+    page?: number,
+    size?: number,
+    brands?: string[],
+    category?: string[],
+    search?: string,
+  ): Observable<{ data: Product[], total: number }> {
     let params = new HttpParams()
 
     if (page !== undefined && size !== undefined) {
@@ -197,6 +203,10 @@ export class ProductService {
     // ✅ send category only when selected
     if (category) {
       body.category = category;
+    }
+
+    if (search?.trim()) {
+      body.search = search.trim();
     }
 
     return this.http.post<{ data: Product[], total: number }>(
